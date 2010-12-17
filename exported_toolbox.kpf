@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Komodo Project File - DO NOT EDIT -->
+<project id="48bfe9b6-75ff-431a-bab3-db3dadd2511b" kpf_version="4" name="exported_toolbox.kpf">
+<command cwd="" doNotOpenOutputWindow="0" env="" id="2430a2ad-2666-4141-b667-b4f21e206852" idref="48bfe9b6-75ff-431a-bab3-db3dadd2511b" insertOutput="0" keyboard_shortcut="" name="start explorer %D" operateOnSelection="0" parseOutput="0" parseRegex="" runIn="command-output-window" showParsedOutputList="0">
+start explorer %D</command>
+<command cwd="" doNotOpenOutputWindow="0" env="" id="3604a151-aca0-42c2-8c52-c9c9df5258fd" idref="48bfe9b6-75ff-431a-bab3-db3dadd2511b" insertOutput="0" keyboard_shortcut="" name="start cd /D %D" operateOnSelection="0" parseOutput="0" parseRegex="" runIn="command-output-window" showParsedOutputList="0">
+start cd /D %D</command>
+<command cwd="" doNotOpenOutputWindow="0" env="" id="4ef8327f-fd7c-4308-b3be-0b6129a814b6" idref="48bfe9b6-75ff-431a-bab3-db3dadd2511b" insertOutput="0" keyboard_shortcut="" name="start cd /D %p" operateOnSelection="0" parseOutput="0" parseRegex="" runIn="command-output-window" showParsedOutputList="0">
+start cd /D %p</command>
+<command cwd="" doNotOpenOutputWindow="0" env="" id="52b4b816-e854-4835-8dc1-883f5d4f0cb2" idref="48bfe9b6-75ff-431a-bab3-db3dadd2511b" insertOutput="1" keyboard_shortcut="" name='perl -e "print scalar localtime"' operateOnSelection="0" parseOutput="0" parseRegex="" runIn="command-output-window" showParsedOutputList="0">
+perl -e "print scalar localtime"</command>
+<snippet icon="chrome://komodo/content/icons/insert-single-column-text-frame.png" id="596c1ead-847b-4235-8870-f2fff293a224" idref="48bfe9b6-75ff-431a-bab3-db3dadd2511b" indent_relative="true" keyboard_shortcut="" name="Comment header Large" set_selection="true">
+#----------------------------------------------------------#
+# [[%ask1:Comment]]
+#----------------------------------------------------------#!@#_currentPos!@#_anchor</snippet>
+<snippet icon="chrome://komodo/content/icons/insert-single-column-text-frame.png" id="9c31d104-91c1-4582-a6c7-c1f75570a25d" idref="48bfe9b6-75ff-431a-bab3-db3dadd2511b" indent_relative="true" keyboard_shortcut="" name="Comment header Small" set_selection="true">
+#----------------------------#
+# [[%ask1:Comment]]
+#----------------------------#!@#_currentPos!@#_anchor</snippet>
+<command cwd="" doNotOpenOutputWindow="0" env="" icon="chrome://komodo/content/icons/draw-pyramid.png" id="a24acfd4-e08e-42e1-b02f-ff625ae00dfd" idref="48bfe9b6-75ff-431a-bab3-db3dadd2511b" insertOutput="1" keyboard_shortcut="" name="perltidy -pbp" operateOnSelection="1" parseOutput="0" parseRegex="^(?P&lt;file&gt;.+?):(?P&lt;line&gt;\d+):(?P&lt;content&gt;.*)$" runIn="command-output-window" showParsedOutputList="0">
+perltidy -pbp</command>
+<command cwd="" doNotOpenOutputWindow="0" env="" icon="chrome://komodo/content/icons/draw-pyramid.png" id="a97ed67a-1329-49cc-abc0-5db935f1a20b" idref="48bfe9b6-75ff-431a-bab3-db3dadd2511b" insertOutput="0" keyboard_shortcut="" name="perltidy -pbp -nst -b %F" operateOnSelection="0" parseOutput="0" parseRegex="" runIn="command-output-window" showParsedOutputList="0">
+perltidy -pbp -nst -b %F</command>
+<snippet icon="chrome://komodo/content/icons/insert-single-column-text-frame.png" id="b39eec1f-bada-4c22-978e-ecad9f0d0b0b" idref="48bfe9b6-75ff-431a-bab3-db3dadd2511b" indent_relative="false" keyboard_shortcut="" name="Method POD" set_selection="false">
+=method [[%ask1:MethodName]]
+
+      Usage : $self-&gt;[[%ask1]](
+            :     $par1, $par2,
+            : );
+    Purpose : blah
+            : blah blah blah
+    Returns : $return
+ Parameters : $par1 : parameter 1
+            : $par2 : parameter 2
+     Throws : no exceptions
+   Comments : none 
+   See Also : n/a
+
+=cut
+!@#_currentPos!@#_anchor</snippet>
+<snippet id="b5fec3ba-9d4b-4f0b-a174-d4e6c2d399d2" idref="48bfe9b6-75ff-431a-bab3-db3dadd2511b" indent_relative="true" keyboard_shortcut="" name="fetchrow_array" set_selection="true">
+while ( my @row = $sth-&gt;fetchrow_array ) {
+    my () = @row;
+}
+!@#_currentPos!@#_anchor</snippet>
+<command cwd="" doNotOpenOutputWindow="0" env="" icon="chrome://komodo/content/icons/draw-pyramid.png" id="bf31e98d-a5d7-4de1-a243-4ef808812d1f" idref="48bfe9b6-75ff-431a-bab3-db3dadd2511b" insertOutput="0" keyboard_shortcut="" name="perlcritic %F" operateOnSelection="0" parseOutput="0" parseRegex="" runIn="command-output-window" showParsedOutputList="0">
+perlcritic %F</command>
+<snippet icon="chrome://komodo/content/icons/insert-single-column-text-frame.png" id="d1fc94a4-3611-4b0c-aa19-f4658ecc0149" idref="48bfe9b6-75ff-431a-bab3-db3dadd2511b" indent_relative="false" keyboard_shortcut="" name="Method FULL" set_selection="false">
+=method [[%ask1:MethodName]]
+
+      Usage : $self-&gt;[[%ask1]](
+            :     [[%ask2:ParameterName]], 
+            : );
+    Purpose : blah
+    Returns : $return
+ Parameters : [[%ask2]] : parameter 1
+     Throws : no exceptions
+   Comments : none 
+   See Also : n/a
+
+=cut
+
+sub [[%ask1]] {
+    my $self = shift;
+    my [[%ask2]] = shift;
+    
+    
+    return;
+}
+!@#_currentPos!@#_anchor</snippet>
+<snippet id="e166d681-1cd7-4e32-bdd6-158648e38e28" idref="48bfe9b6-75ff-431a-bab3-db3dadd2511b" indent_relative="false" keyboard_shortcut="" name="slruping" set_selection="false">
+my $content = do { local $/; &lt;$infh&gt; };!@#_currentPos!@#_anchor</snippet>
+<snippet icon="chrome://komodo/content/icons/insert-single-column-text-frame.png" id="e435039b-0311-4203-b952-235c20b7789c" idref="48bfe9b6-75ff-431a-bab3-db3dadd2511b" indent_relative="false" keyboard_shortcut="" name="Method Bone" set_selection="false">
+sub [[%ask1:MethodName]] {
+    my $self = shift;
+    
+    
+    
+    return;
+}!@#_currentPos!@#_anchor</snippet>
+<snippet id="f204ac79-a041-47b6-b009-1d9c25344aed" idref="48bfe9b6-75ff-431a-bab3-db3dadd2511b" indent_relative="false" keyboard_shortcut="" name="CLI applications" set_selection="false">
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+use Getopt::Long;
+use Pod::Usage;
+use Config::Tiny;
+use FindBin;
+use YAML qw(Dump Load DumpFile LoadFile);
+
+#----------------------------------------------------------#
+# GetOpt section
+#----------------------------------------------------------#
+my $man  = 0;
+my $help = 0;
+
+GetOptions(
+    'help|?' =&gt; \$help,
+    'man'    =&gt; \$man,
+) or pod2usage(2);
+
+pod2usage(1) if $help;
+pod2usage( -exitstatus =&gt; 0, -verbose =&gt; 2 ) if $man;
+
+#----------------------------------------------------------#
+# Start
+#----------------------------------------------------------#
+
+
+exit;
+
+__END__
+
+=head1 NAME
+
+sample - Using GetOpt::Long and Pod::Usage
+
+=head1 SYNOPSIS
+
+sample [options] [file ...]
+  Options:
+    --help              brief help message
+    --man               full documentation
+
+=head1 OPTIONS
+
+=over 8
+
+=item B&lt;-help&gt;
+
+Print a brief help message and exits.
+
+=item B&lt;-man&gt;
+
+Prints the manual page and exits.
+
+=back
+
+=head1 DESCRIPTION
+
+B&lt;This program&gt; will read the given input file(s) and do someting
+useful with the contents thereof.
+
+=cut
+!@#_currentPos!@#_anchor</snippet>
+<snippet icon="chrome://komodo/content/icons/insert-single-column-text-frame.png" id="f22f1d9c-6265-463a-9982-2a4fae22b6ed" idref="48bfe9b6-75ff-431a-bab3-db3dadd2511b" indent_relative="false" keyboard_shortcut="" name="Block comment" set_selection="false">
+##################################################
+# Usage      : ????
+# Purpose    : ????
+# Returns    : ????
+# Parameters : ????
+# Throws     : no exceptions
+# Comments   : none
+# See Also   : n/a
+!@#_currentPos!@#_anchor</snippet>
+<preference-set idref="48bfe9b6-75ff-431a-bab3-db3dadd2511b">
+  <boolean id="import_live">0</boolean>
+</preference-set>
+</project>
