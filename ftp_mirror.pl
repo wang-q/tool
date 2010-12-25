@@ -10,6 +10,9 @@ use Net::FTP;
 use File::Path;
 use Cwd;
 
+use FindBin;
+use YAML qw(Dump Load DumpFile LoadFile);
+
 use AlignDB::Run;
 
 has 'server' => (
@@ -70,8 +73,16 @@ has 'dump' => (
     isa           => 'Str',
     default       => '',
     traits        => ['Getopt'],
-    cmd_aliases   => [qw{ d }],
-    documentation => "Use Dumped list of files",
+    cmd_aliases   => [qw{ i }],
+    documentation => "Use the dumpfile",
+);
+has 'outdump' => (
+    is            => 'rw',
+    isa           => 'Str',
+    default       => '',
+    traits        => ['Getopt'],
+    cmd_aliases   => [qw{ o }],
+    documentation => "Output filelist dumpfile",
 );
 
 has 'ftp' => (
@@ -123,11 +134,20 @@ sub list {
     $self->{ftp} = $ftp;
 
     $self->do_mirror;
+
+    chdir $FindBin::Bin;
+    DumpFile( $self->outdump, { get => $self->get, skip => $self->skip } );
+    print "Filelist dumped as " . $self->outdump . "\n";
+
     return;
 }
 
 sub download {
     my $self = shift;
+
+    my $list = LoadFile( $self->dump );
+    $self->get( $list->{get} );
+    $self->skip( $list->{skip} );
 
     my $worker = sub {
         my $job = shift;
@@ -172,6 +192,8 @@ sub do_mirror {
 
     my ( $prefix, $leaf ) = $rdir =~ m{^(.*?)([^/]+)/?$};
     $ftp->cwd($prefix) if $prefix;
+
+    $self->outdump("$leaf.yml");
 
     return $self->get_file($leaf) if $type eq '-';    # ordinary file
     return $self->get_dir($leaf)  if $type eq 'd';    # directory
@@ -277,40 +299,21 @@ sub parse_listing {
 1;
 
 package main;
-use FindBin;
-use YAML qw(Dump Load DumpFile LoadFile);
 
-my $mirror           = FtpMirror->new_with_options;
-my $default_dumpfile = "ftp_list.yml";
+my $mirror = FtpMirror->new_with_options;
 
 if ( $mirror->dump ) {
-    my $dumpfile;
-    if ( -e $mirror->dump ) {
-        $dumpfile = $mirror->dump;
-    }
-    elsif ( -e $default_dumpfile ) {
-        $dumpfile = $default_dumpfile;
-    }
-    else {
-        die "Dumping file doesn't exist\n";
-    }
-    my $list = LoadFile($default_dumpfile);
-    $mirror->get( $list->{get} );
-    $mirror->skip( $list->{skip} );
-
+    die "Dumping file doesn't exist\n" unless -e $mirror->dump;
     $mirror->download;
 }
 else {
     $mirror->list;
-    chdir $FindBin::Bin;
-    DumpFile( $default_dumpfile,
-        { get => $mirror->get, skip => $mirror->skip } );
 }
 
 __END__
 
-Step 1: Get list of files and dump it to "ftp_list.yml"
+Step 1: Get list of files and dump it to "saccharomyces_cerevisiae.yml"
 perl ftp_mirror.pl -s ftp.ensembl.org -r /pub/release-60/fasta/saccharomyces_cerevisiae/ -l e:\data\ensembl60\ -v
 
 Step 2: Use the default dumpfile and download files in parallel with curl
-perl ftp_mirror.pl -d 1 -p 8
+perl ftp_mirror.pl -i saccharomyces_cerevisiae.yml -p 8
