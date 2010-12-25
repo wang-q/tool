@@ -164,6 +164,9 @@ sub download {
         print $cmd, "\n";
         system $cmd;
 
+        utime $job->{rtime}, $job->{rtime},
+            $local;          # set local file's timestamp
+
         return;
     };
 
@@ -234,6 +237,13 @@ sub get_file {
     my $rsize = $ftp->size($path);
 
     my ( $lsize, $ltime ) = stat($path) ? ( stat(_) )[ 7, 9 ] : ( 0, 0 );
+    my $info = {
+        remote => $remote,
+        local  => $local,
+        file   => $path,
+        rtime  => $rtime
+    };
+
     if (    defined($rtime)
         and defined($rsize)
         and ( $ltime >= $rtime )
@@ -241,13 +251,12 @@ sub get_file {
     {
         warn "Getting file $path: not newer than local copy.\n"
             if $self->verbose;
-        $self->add_skip(
-            { remote => $remote, local => $local, file => $path } );
+        $self->add_skip($info);
         return;
     }
 
     warn "Getting file $path\n" if $self->verbose;
-    $self->add_get( { remote => $remote, local => $local, file => $path } );
+    $self->add_get($info);
 }
 
 # mirror a directory, recursively
