@@ -176,7 +176,9 @@ sub skip_filter {
 		IO::Socket::SSL Image::Magick Math::Pari Net::Ping Net::SSH2
 		POE::Loop::Gtk PPM Pango Perl PerlCryptLib Term::ReadLine
 		Test::Dependencies Text::Iconv Time::y2038 Win32API::Registry
-		Wx::GLCanvas XML::Parser::Style::EasyTree mod_perl
+		Wx::GLCanvas XML::Parser::Style::EasyTree mod_perl Module::ScanDeps
+		Net::Server XML::LibXML Growl::GNTP Getopt::Lucid Math::BigInt::GMP
+		Math::MPC Math::MPFR
     };
 
     my @skips_qr = ( qr/compress/i, qr/SOAP/ );

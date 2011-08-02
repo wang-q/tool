@@ -31,11 +31,11 @@ my $add = {
 # GTK related variables
 # Move all gtk files to c/
 my $add_gtk = {
-    GTK_BASEPATH    => qw{ C:\strawberry\c },
-    INCLUDE         => [qw{ C:\strawberry\c\include }],
-    LIB             => [qw{ C:\strawberry\c\lib }],
-    PATH            => [qw{ C:\strawberry\c\bin }],
-    PKG_CONFIG_PATH => [qw{ C:\strawberry\c\lib\pkgconfig }],
+    GTK_BASEPATH    => qw{ C:\strawberry\gtk },
+    INCLUDE         => [qw{ C:\strawberry\gtk\include }],
+    LIB             => [qw{ C:\strawberry\gtk\lib }],
+    PATH            => [qw{ C:\strawberry\gtk\bin }],
+    PKG_CONFIG_PATH => [qw{ C:\strawberry\gtk\lib\pkgconfig }],
 };
 
 # Misc variables
@@ -91,7 +91,11 @@ sub add {
     for my $key ( sort keys %$dispatch ) {
         my $value = $dispatch->{$key};
         if ( ref $value eq 'ARRAY' ) {
-            my @exists = split /;/, GetEnv( ENV_SYSTEM, $key );
+            my @exists;
+            eval {
+                @exists = split /;/, GetEnv( ENV_SYSTEM, $key );
+            };
+            print $@, "\n" if $@;
             for my $add (@$value) {
                 @exists = grep { lc $add ne lc $_ } @exists;
                 push @exists, $add;
@@ -105,3 +109,5 @@ sub add {
 
     return 1;
 }
+
+# In Windows 7, you should run this script as Administrator
