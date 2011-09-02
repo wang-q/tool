@@ -42,8 +42,8 @@ my $add_gtk = {
 # See the follow link for details
 # http://win32.perl.org/wiki/index.php?title=Environment_Variables
 my $add_misc = {
-    EDITOR      => qw{ D:/Tools/vim/gvim.exe },
-    VISUAL      => qw{ D:/Tools/vim/gvim.exe },
+    EDITOR      => qw{ c:/Tools/vim/gvim.exe },
+    VISUAL      => qw{ c:/Tools/vim/gvim.exe },
     HOME        => $ENV{HOMEDRIVE} . $ENV{HOMEPATH},
     PGPLOT_FONT => qw{ C:\strawberry\perl\bin\grfont.dat },
 };
@@ -52,20 +52,20 @@ my $add_misc = {
 my $add_others = {
     PATH => [
         qw{
-            D:\Tools\clustalw1.83.XP
-            D:\Tools\muscle
-            D:\Tools\paml\bin
-            D:\Tools\Primer3
-            D:\Tools\graphviz\bin
-            D:\Tools\MySQL\bin
-            D:\Tools\SQLite
-            D:\Tools\subversion
-            D:\Tools\Perforce
-            D:\Tools\Git\cmd
-            D:\Tools\CMake\bin
-            D:\Tools\ImageMagick
-            D:\Tools\GnuPG
-            D:\Tools\vim
+            c:\Tools\clustalw1.83.XP
+            c:\Tools\muscle
+            c:\Tools\paml\bin
+            c:\Tools\Primer3
+            c:\Tools\graphviz\bin
+            c:\Tools\MySQL\bin
+            c:\Tools\SQLite
+            c:\Tools\subversion
+            c:\Tools\Perforce
+            c:\Tools\Git\cmd
+            c:\Tools\CMake\bin
+            c:\Tools\ImageMagick
+            c:\Tools\GnuPG
+            c:\Tools\vim
             }
     ],
 };

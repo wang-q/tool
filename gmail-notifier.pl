@@ -28,9 +28,9 @@ sub run {
         on_new_entry => sub {
             my $entry = shift;
             print "[Unread mail] \n",
-                "[Title] " . $entry->title . "\n",
-                "[Message] " . $entry->summary . "\n",
-                "\n";
+              "[Title] " . $entry->title . "\n",
+              "[Message] " . $entry->summary . "\n",
+              "\n";
             $growl->notify(
                 Event   => "gmail",
                 Title   => $entry->title,
