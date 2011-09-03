@@ -1,0 +1,4 @@
+log normal append:log.txt
+filter "-*.bak;-games\"
+load %1 %2
+sync mirror:left->right
