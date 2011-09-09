@@ -15,6 +15,17 @@ set name=Scripts
 echo %name%
 %exe% /leftreadonly /closescript @%script% d:\wq\%name% \\114.212.200.213\wangq\%name%
 
+set script="d:\wq\Scripts\tool\bcompare\mirror_folders.txt"
+
+set name=minicpan
+echo %name%
+%exe% /leftreadonly /closescript @%script% d:\%name% \\114.212.200.213\wangq\%name%
+
+set name=software
+echo %name%
+%exe% /leftreadonly /closescript @%script% d:\%name% \\114.212.200.213\wangq\%name%
+
+
 endlocal
 
 :end
