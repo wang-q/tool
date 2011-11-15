@@ -2,7 +2,19 @@
 use strict;
 use warnings;
 
+use Win32;
 use Win32::Env;
+
+# check admin rights
+# On Windows vista and 7, you should run this script as Administrator
+print Win32::GetOSDisplayName(), "\n" x 2;
+if (Win32::IsAdminUser()) {
+    print "Got admin rights, continue.\n";
+}
+else {
+    print "Your should get admin rights first to run this script.\n";
+    exit 1;
+}
 
 # INCLUDE, LIB and PATH
 my $add = {
@@ -66,6 +78,8 @@ my $add_others = {
             c:\Tools\ImageMagick
             c:\Tools\GnuPG
             c:\Tools\vim
+            c:\Tools\python\
+            c:\Tools\R\bin\
             }
     ],
 };
@@ -109,5 +123,3 @@ sub add {
 
     return 1;
 }
-
-# In Windows 7, you should run this script as Administrator
