@@ -15,10 +15,10 @@ has 'local_base'  => ( is => 'rw', isa => 'Str', required => 1, );
 
 # key => url; value => localpath
 has 'url_path' => ( is => 'rw', isa => 'HashRef', default => sub { {} } );
-has 'url_bad'   => ( is => 'rw', isa => 'HashRef', default => sub { {} } );
+has 'url_bad'  => ( is => 'rw', isa => 'HashRef', default => sub { {} } );
 
 has 'dir_to_mk' => ( is => 'rw', isa => 'HashRef', default => sub { {} } );
-has 'verbose' => ( is => 'rw', isa => 'Str', default => 0, );
+has 'verbose' => ( is => 'rw', isa => 'Bool', default => 0, );
 
 # in the same site
 sub check_site {
@@ -151,19 +151,50 @@ sub convert_all {
 1;
 
 package main;
+
+use Getopt::Long;
+use Pod::Usage;
+use YAML qw(Dump Load DumpFile LoadFile);
+
 use URI;
 use URI::Split qw(uri_split uri_join);
 
-#use Net::INET6Glue::INET_is_INET6;
 use LWP::Simple;
 use WWW::Mechanize;
 use File::Spec;
-use YAML qw(Dump Load DumpFile LoadFile);
 
-my $main_url = shift
-    || 'http://hgdownload.cse.ucsc.edu/goldenPath/hg18/';
+#----------------------------------------------------------#
+# GetOpt section
+#----------------------------------------------------------#
+# running options
+my $main_url;
 
-my $working_dir = shift || '.';
+my $working_dir = '.';
+my $ipv6;
+
+my $man  = 0;
+my $help = 0;
+
+GetOptions(
+    'help|?'  => \$help,
+    'man'     => \$man,
+    'u|url=s' => \$main_url,
+    'd|dir=s' => \$working_dir,
+    '6|ipv6'  => \$ipv6,
+) or pod2usage(2);
+
+pod2usage(1) if $help;
+pod2usage( -exitstatus => 0, -verbose => 2 ) if $man;
+
+#----------------------------------------------------------#
+# init
+#----------------------------------------------------------#
+# When downloading from an IPV6 site, we require this package
+# It's not compatible with IPV4 sites
+if ($ipv6) {
+    require Net::INET6Glue::INET_is_INET6;
+}
+
 my ( $site, $remote_base, $local_base );
 {
     my ( $scheme, $auth, $path, $query, $frag ) = uri_split($main_url);
@@ -173,7 +204,7 @@ my ( $site, $remote_base, $local_base );
     my ( $vol, $dirs, $file ) = File::Spec->splitpath($remote_base);
     my @dirs = grep {/[\w-]/} File::Spec->splitdir($dirs);
 
-    $local_base = File::Spec->catdir( @dirs ); 
+    $local_base = File::Spec->catdir(@dirs);
 }
 
 my $urlchecker = Urlcheck->new(
@@ -184,21 +215,28 @@ my $urlchecker = Urlcheck->new(
 );
 print Dump $urlchecker;
 
+#----------------------------------------------------------#
+# run
+#----------------------------------------------------------#
 printf "URL: %s\n",         $main_url;
 printf "WORKING DIR: %s\n", $working_dir;
 walking( $main_url, $urlchecker );
 
 # convert remote url to local path
-$urlchecker->convert_all;
-my $yamlfile = $remote_base;
-$yamlfile =~ s/[^\w]/_/g;
-$yamlfile = File::Spec->catfile( $working_dir, $yamlfile . '.yml' );
-DumpFile(
-    $yamlfile,
-    {   url_path  => $urlchecker->url_path,
-        dir_to_mk => $urlchecker->dir_to_mk,
-    }
-);
+my $yamlfile;
+{
+    $urlchecker->convert_all;
+    $yamlfile = join "_", grep {/[\w-]/} split /\//, $remote_base;
+    my $ext = $ipv6 ? '.ipv6.yml' : '.yml';
+
+    $yamlfile = File::Spec->catfile( $working_dir, $yamlfile . $ext );
+    DumpFile(
+        $yamlfile,
+        {   url_path  => $urlchecker->url_path,
+            dir_to_mk => $urlchecker->dir_to_mk,
+        }
+    );
+}
 
 #----------------------------#
 # subs in package main
