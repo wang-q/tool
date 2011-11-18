@@ -43,7 +43,6 @@ if ($ipv6) {
     require Net::INET6Glue::INET_is_INET6;
 }
 
-my $path_rx  = quotemeta $path_regex;
 my $parallel = 4;
 
 my $dispatch  = LoadFile($file_yaml);
@@ -67,7 +66,7 @@ for my $dir ( sort keys %{$dir_to_mk} ) {
 my @jobs;
 for my $url ( sort keys %{$url_path} ) {
     my $path = $url_path->{$url};
-    next unless $path =~ /$path_rx/;
+    next unless $path =~ /$path_regex/;
 
     $path = file( $base_dir, $url_path->{$url} )->stringify;
     push @jobs, [ $url, $path ];

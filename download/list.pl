@@ -171,6 +171,7 @@ my $main_url;
 
 my $working_dir = '.';
 my $ipv6;
+my $avoid_regex = '(affy|database|encode|multiz|phastCons|phyloP)';
 
 my $man  = 0;
 my $help = 0;
@@ -180,6 +181,7 @@ GetOptions(
     'man'     => \$man,
     'u|url=s' => \$main_url,
     'd|dir=s' => \$working_dir,
+    'r|regex=s' => \$avoid_regex,
     '6|ipv6'  => \$ipv6,
 ) or pod2usage(2);
 
@@ -245,16 +247,18 @@ sub walking {
     my $url        = shift;
     my $urlchecker = shift;
 
-    if ( $urlchecker->already_met($url) ) {
-        return;
-    }
-
-    if ( $urlchecker->add_url($url) != 1 ) {
-        return;
-    }
+    return if $urlchecker->already_met($url);
+    return if $urlchecker->add_url($url) != 1;
+    return if $url =~ /\.(rar|7z|bz|zip|gz|tgz)$/i;
+    return if $url =~ /\.(gif|jpg|jpeg|png)$/i;
+    return if $url =~ /\.(md5|txt|sql)$/i;
+    return if $url =~ /\.(2bit|lav|axt|fa|fasta|fastq)$/i;
+    return if $url =~ /\.(bb|nh|mod)$/i;
+    return if $url =~ /$avoid_regex/i;
 
     if ( is_html($url) ) {
-        my $mech  = get_page_obj($url);
+        my $mech = get_page_obj($url);
+        return unless $mech;
         my @links = $mech->find_all_links();
         for my $link (@links) {
             if ( $link->text =~ /Parent Directory/i ) {
@@ -277,7 +281,8 @@ sub get_page_obj {
     my $url = shift;
 
     my $mech = WWW::Mechanize->new;
-    $mech->get($url);
+    eval { $mech->get($url); };
+    warn $@, "\n" if $@;
 
     return $mech;
 }
