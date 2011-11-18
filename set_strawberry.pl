@@ -7,12 +7,12 @@ use Win32::Env;
 
 # check admin rights
 # On Windows vista and 7, you should run this script as Administrator
-print Win32::GetOSDisplayName(), "\n" x 2;
+print Win32::GetOSDisplayName(), "\n\n";
 if (Win32::IsAdminUser()) {
-    print "Got admin rights, continue.\n";
+    print "Got admin rights, continue.\n\n";
 }
 else {
-    print "Your should get admin rights first to run this script.\n";
+    print "Your should get admin rights first to run this script.\n\n";
     exit 1;
 }
 
@@ -80,6 +80,7 @@ my $add_others = {
             c:\Tools\vim
             c:\Tools\python\
             c:\Tools\R\bin\
+            c:\Tools\curl\
             }
     ],
 };
