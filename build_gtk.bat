@@ -90,7 +90,7 @@ copy Gtk2.a C:\strawberry\perl\site\lib\auto\Gtk2\
 rem ##########
 rem Perl modules
 rem Recent version EU::MM fixed most of above bugs
-rem Gtk2-1.223 and gtk 2.16.6 pass on Windows 7 x64, gtk 2.20 and 2.22 passed at Glib, Cairo and Pango, but failed at Gtk2
+rem Gtk2-1.223 and gtk 2.16.6 pass on Windows 7 x64, gtk 2.20, 2.22,2.24 passed at Glib, Cairo and Pango, but failed at Gtk2
 rem Modify pangocairo.pc
 rem Libs: -L${libdir} -lpangocairo-1.0 C:/strawberry/perl/site/lib/auto/Cairo/Cairo.a
 

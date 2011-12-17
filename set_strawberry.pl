@@ -81,6 +81,7 @@ my $add_others = {
             c:\Tools\python\
             c:\Tools\R\bin\
             c:\Tools\curl\
+            d:\wq\Scripts\tool\
             }
     ],
 };
