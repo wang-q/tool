@@ -66,6 +66,7 @@ my $add_others = {
         qw{
             c:\Tools\clustalw1.83.XP
             c:\Tools\muscle
+            c:\Tools\mafft
             c:\Tools\paml\bin
             c:\Tools\Primer3
             c:\Tools\graphviz\bin
@@ -78,6 +79,7 @@ my $add_others = {
             c:\Tools\ImageMagick
             c:\Tools\GnuPG
             c:\Tools\vim
+            c:\Tools\putty
             c:\Tools\python\
             c:\Tools\R\bin\
             c:\Tools\curl\
