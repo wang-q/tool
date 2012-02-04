@@ -166,23 +166,25 @@ use File::Spec;
 #----------------------------------------------------------#
 # GetOpt section
 #----------------------------------------------------------#
+my $cmdline = join " ", ( $0, @ARGV );
+
 # running options
 my $main_url;
 
 my $working_dir = '.';
 my $ipv6;
-my $avoid_regex = '(affy|database|encode|multiz|phastCons|phyloP)';
+my $avoid_regex = '(affy|encode|multiz|phastCons|phyloP)';
 
 my $man  = 0;
 my $help = 0;
 
 GetOptions(
-    'help|?'  => \$help,
-    'man'     => \$man,
-    'u|url=s' => \$main_url,
-    'd|dir=s' => \$working_dir,
+    'help|?'    => \$help,
+    'man'       => \$man,
+    'u|url=s'   => \$main_url,
+    'd|dir=s'   => \$working_dir,
     'r|regex=s' => \$avoid_regex,
-    '6|ipv6'  => \$ipv6,
+    '6|ipv6'    => \$ipv6,
 ) or pod2usage(2);
 
 pod2usage(1) if $help;
@@ -236,6 +238,7 @@ my $yamlfile;
         $yamlfile,
         {   url_path  => $urlchecker->url_path,
             dir_to_mk => $urlchecker->dir_to_mk,
+            cmdline   => $cmdline,
         }
     );
 }
