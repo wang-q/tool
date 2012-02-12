@@ -8,7 +8,7 @@ use Win32::Env;
 # check admin rights
 # On Windows vista and 7, you should run this script as Administrator
 print Win32::GetOSDisplayName(), "\n\n";
-if (Win32::IsAdminUser()) {
+if ( Win32::IsAdminUser() ) {
     print "Got admin rights, continue.\n\n";
 }
 else {
@@ -54,10 +54,13 @@ my $add_gtk = {
 # See the follow link for details
 # http://win32.perl.org/wiki/index.php?title=Environment_Variables
 my $add_misc = {
-    EDITOR      => qw{ c:/Tools/vim/gvim.exe },
-    VISUAL      => qw{ c:/Tools/vim/gvim.exe },
-    HOME        => $ENV{HOMEDRIVE} . $ENV{HOMEPATH},
-    PGPLOT_FONT => qw{ C:\strawberry\perl\bin\grfont.dat },
+    EDITOR => qw{ c:/Tools/vim/gvim.exe },
+    VISUAL => qw{ c:/Tools/vim/gvim.exe },
+    HOME   => $ENV{HOMEDRIVE} . $ENV{HOMEPATH},
+    PGPLOT_FONT =>
+        qw{ C:\strawberry\perl\site\lib\PGPLOT\pgplot_supp\grfont.dat },
+    PLPLOT_LIB => qw{ c:\strawberry\perl\site\lib\PDL\plplot_supp },
+    PROJ_LIB   => qw{ c:\strawberry\perl\site\lib\PDL\proj_supp },
 };
 
 # Other bin paths in D:\Tools
@@ -80,10 +83,10 @@ my $add_others = {
             c:\Tools\GnuPG
             c:\Tools\vim
             c:\Tools\putty
-            c:\Tools\python\
-            c:\Tools\R\bin\
-            c:\Tools\curl\
-            d:\wq\Scripts\tool\
+            c:\Tools\python
+            c:\Tools\R\bin
+            c:\Tools\curl
+            d:\wq\Scripts\tool
             }
     ],
 };
@@ -110,9 +113,7 @@ sub add {
         my $value = $dispatch->{$key};
         if ( ref $value eq 'ARRAY' ) {
             my @exists;
-            eval {
-                @exists = split /;/, GetEnv( ENV_SYSTEM, $key );
-            };
+            eval { @exists = split /;/, GetEnv( ENV_SYSTEM, $key ); };
             print $@, "\n" if $@;
             for my $add (@$value) {
                 @exists = grep { lc $add ne lc $_ } @exists;
