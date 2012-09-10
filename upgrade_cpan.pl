@@ -181,7 +181,7 @@ sub skip_filter {
 		Math::MPC Math::MPFR
     };
 
-    my @skips_qr = ( qr/compress/i, qr/SOAP/ );
+    my @skips_qr = ( qr/compress/i, qr/SOAP/, qr/PDL/ );
 
     my @upgrades;
     for my $one (@lists) {
