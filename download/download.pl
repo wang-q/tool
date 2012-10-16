@@ -11,6 +11,7 @@ use LWP::Simple;
 use LWP::UserAgent;
 use Path::Class;
 use File::Path qw(make_path);
+use LockFile::Simple qw(lock trylock unlock);
 
 use AlignDB::Run;
 
@@ -66,10 +67,10 @@ for my $dir ( sort keys %{$dir_to_mk} ) {
     make_path($dir) unless -e $dir;
 }
 
-my ( $aria_file, $aria_fh );
+my $aria2_file;
 if ($aria2) {
-    $aria_file = $file_yaml . ".txt";
-    open $aria_fh, ">>", $aria_file;
+    $aria2_file = $file_yaml . ".txt";
+    unlink $aria2_file if -e $aria2_file;
 }
 
 #----------------------------#
@@ -86,11 +87,12 @@ for my $url ( sort keys %{$url_path} ) {
 
 my $worker = sub {
     my $job = shift;
+    my $opt = shift;
 
     my ( $url, $path ) = @{$job};
     printf "* URL: %s\n" . "* LOCAL: %s\n", $url, $path;
 
-    if ( $wget or $aria2 ) {
+    if ( $wget or $aria2 ) {    # wget or aria2
         my ( $is_success, $rsize, $rmtime ) = get_headers($url);
         if ($is_success) {
             if ( -e $path and $rsize and $rmtime ) {
@@ -141,10 +143,14 @@ my $worker = sub {
             $str .= "  dir=" . $file->dir->stringify . "\n";
             $str .= "  out=" . $file->basename . "\n";
 
-            print {$aria_fh} $str;
+            trylock($aria2_file);
+            open my $fh, '>>', $aria2_file;
+            print {$fh} $str;
+            close $fh;
+            unlock($aria2_file);
         }
     }
-    else {
+    else {    # LWP
         my $rc = get_file( $url, $path );
         printf "* RC: %s\n\n", $rc;
     }
@@ -160,9 +166,8 @@ my $run = AlignDB::Run->new(
 $run->run;
 
 if ($aria2) {
-    close $aria_fh;
     print "Run something like the following command to start downloading.\n";
-    print "aria2c -x 12 -s 4 -i $aria_file\n";
+    print "aria2c -x 12 -s 4 -i $aria2_file\n";
 }
 
 #----------------------------#
