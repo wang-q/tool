@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
+use autodie;
 
 use Getopt::Long;
 use Pod::Usage;
@@ -20,7 +21,8 @@ use AlignDB::Run;
 my $file_yaml;
 my $path_regex = '.';
 my $ipv6;
-my $wget;
+my $wget;     # use wget instead of LWP
+my $aria2;    # generate a aria2 input file
 
 my $man  = 0;
 my $help = 0;
@@ -32,6 +34,7 @@ GetOptions(
     'r|regex=s' => \$path_regex,
     '6|ipv6'    => \$ipv6,
     'w|wget'    => \$wget,
+    'a|aria2'   => \$aria2,
 ) or pod2usage(2);
 
 pod2usage(1) if $help;
@@ -63,6 +66,12 @@ for my $dir ( sort keys %{$dir_to_mk} ) {
     make_path($dir) unless -e $dir;
 }
 
+my ( $aria_file, $aria_fh );
+if ($aria2) {
+    $aria_file = $file_yaml . ".txt";
+    open $aria_fh, ">>", $aria_file;
+}
+
 #----------------------------#
 # parallel download
 #----------------------------#
@@ -81,7 +90,7 @@ my $worker = sub {
     my ( $url, $path ) = @{$job};
     printf "* URL: %s\n" . "* LOCAL: %s\n", $url, $path;
 
-    if ($wget) {
+    if ( $wget or $aria2 ) {
         my ( $is_success, $rsize, $rmtime ) = get_headers($url);
         if ($is_success) {
             if ( -e $path and $rsize and $rmtime ) {
@@ -97,29 +106,43 @@ my $worker = sub {
             return;
         }
 
-        # wget exit status
-        my $error_of = {
-            0 => "No problems occurred",
-            1 => "Generic error code",
-            2 => "Parse error¡ªfor instance",
-            3 => "File I/O error",
-            4 => "Network failure",
-            5 => "SSL verification failure",
-            6 => "Username/password authentication failure",
-            7 => "Protocol errors",
-            8 => "Server issued an error response",
-        };
-
         unlink $path if -e $path;
-        my $rc = wget_file( $url, $path );
-        if ( defined $rc ) {
-            if ( $rc == 0 ) {
-                utime $rmtime, $rmtime, $path if $rmtime;
+
+        if ($wget) {
+
+            # wget exit status
+            my $error_of = {
+                0 => "No problems occurred",
+                1 => "Generic error code",
+                2 => "Parse error¡ªfor instance",
+                3 => "File I/O error",
+                4 => "Network failure",
+                5 => "SSL verification failure",
+                6 => "Username/password authentication failure",
+                7 => "Protocol errors",
+                8 => "Server issued an error response",
+            };
+
+            my $rc = wget_file( $url, $path );
+            if ( defined $rc ) {
+                if ( $rc == 0 ) {
+                    utime $rmtime, $rmtime, $path if $rmtime;
+                }
+                printf "* WGET: %s\n\n",
+                    $error_of->{$rc} ? $error_of->{$rc} : $rc;
             }
-            printf "* WGET: %s\n\n",
-                $error_of->{$rc} ? $error_of->{$rc} : $rc;
+            printf "* WGET: %s\n\n", "Something goes wrong";
         }
-        printf "* WGET: %s\n\n", "Something goes wrong";
+        elsif ($aria2) {
+            my $str;
+            $str .= "$url\n";
+
+            my $file = file($path);
+            $str .= "  dir=" . $file->dir->stringify . "\n";
+            $str .= "  out=" . $file->basename . "\n";
+
+            print {$aria_fh} $str;
+        }
     }
     else {
         my $rc = get_file( $url, $path );
@@ -135,6 +158,12 @@ my $run = AlignDB::Run->new(
     code     => $worker,
 );
 $run->run;
+
+if ($aria2) {
+    close $aria_fh;
+    print "Run something like the following command to start downloading.\n";
+    print "aria2c -x 12 -s 4 -i $aria_file\n";
+}
 
 #----------------------------#
 # subs
@@ -177,3 +206,6 @@ __END__
 perl download.pl -i _goldenPath_sacCer3_multiz7way_.yml -r gz
 
 perl download.pl -i _goldenPath_sacCer3_multiz7way_.ipv6.yml -r gz -6
+
+>perl download.pl -i 19genomes_fasta.yml -a
+>c:\tools\aria2\aria2c -x 12 -s 4 -i D:\wq\Scripts\tool\download\19genomes_fasta.yml.txt
