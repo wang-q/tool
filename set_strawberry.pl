@@ -67,6 +67,8 @@ my $add_misc = {
 my $add_others = {
     PATH => [
         qw{
+            c:\Tools\bin
+            c:\Tools\blastplus\bin
             c:\Tools\clustalw1.83.XP
             c:\Tools\muscle
             c:\Tools\mafft
