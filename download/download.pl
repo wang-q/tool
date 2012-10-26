@@ -166,7 +166,7 @@ my $run = AlignDB::Run->new(
 $run->run;
 
 if ($aria2) {
-    print "Run something like the following command to start downloading.\n";
+    print "\nRun something like the following command to start downloading.\n";
     print "aria2c -x 12 -s 4 -i $aria2_file\n";
 }
 
