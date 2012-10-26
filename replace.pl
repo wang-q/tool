@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
+use autodie;
 
 use Getopt::Long;
 use Pod::Usage;
@@ -10,6 +11,7 @@ use File::Find::Rule;
 my $dir = '.';
 my $find;
 my $replace;
+my $pattern;
 
 my $man  = 0;
 my $help = 0;
@@ -20,16 +22,22 @@ GetOptions(
     'dir=s'     => \$dir,
     'find=s'    => \$find,
     'replace=s' => \$replace,
+    'pattern=s' => \$pattern,
 ) or pod2usage(2);
 
 pod2usage(1) if $help;
 pod2usage( -exitstatus => 0, -verbose => 2 ) if $man;
 
-# find out all ascii file
-my @files = File::Find::Rule->file()->ascii->in($dir);
+my @files;
+if ($pattern) {
+    @files = sort File::Find::Rule->file->name($pattern)->in($dir);
+}
+else {    # find out all ascii file
+    @files = File::Find::Rule->file->ascii->in($dir);
+}
 
 $find    = quotemeta $find;
-$replace = quotemeta $replace;
+$replace = $replace;
 
 for my $file (@files) {
 
@@ -60,13 +68,14 @@ __END__
 
 =head1 SYNOPSIS
 
-    replace.pl [options]
-        Options:
-            --help              brief help message
-            --man               full documentation
-            --dir               directory
-            --find              find what
-            --replace           replace with
+    perl replace.pl [options]
+      Options:
+        --help              brief help message
+        --man               full documentation
+        --dir               directory
+        --find              find what
+        --replace           replace with
+        --pattern           filename pattern
 
 =head1 OPTIONS
 
