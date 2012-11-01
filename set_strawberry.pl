@@ -69,25 +69,19 @@ my $add_others = {
         qw{
             c:\Tools\bin
             c:\Tools\blastplus\bin
-            c:\Tools\clustalw1.83.XP
             c:\Tools\muscle
             c:\Tools\mafft
             c:\Tools\paml\bin
             c:\Tools\Primer3
             c:\Tools\graphviz\bin
             c:\Tools\MySQL\bin
-            c:\Tools\SQLite
-            c:\Tools\subversion
-            c:\Tools\Perforce
             c:\Tools\Git\cmd
             c:\Tools\CMake\bin
             c:\Tools\ImageMagick
-            c:\Tools\GnuPG
             c:\Tools\vim
             c:\Tools\putty
             c:\Tools\python
             c:\Tools\R\bin
-            c:\Tools\curl
             d:\wq\Scripts\tool
             }
     ],
