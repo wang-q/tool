@@ -20,6 +20,8 @@ has 'url_bad'  => ( is => 'rw', isa => 'HashRef', default => sub { {} } );
 has 'dir_to_mk' => ( is => 'rw', isa => 'HashRef', default => sub { {} } );
 has 'verbose' => ( is => 'rw', isa => 'Bool', default => 0, );
 
+has 'not_check_parent' => ( is => 'rw', isa => 'Bool', default => 0, );
+
 # in the same site
 sub check_site {
     my $self = shift;
@@ -45,8 +47,12 @@ sub check_parent {
             return 1;
         }
     }
+    else {
+        print "path => [$path]\tremote_base => [$remote_base]\n"
+            if $self->verbose;
+        return 0;
+    }
 
-    return 0;
 }
 
 # doesn't have query and frag
@@ -79,17 +85,34 @@ sub add_url {
     my $url_path = $self->url_path;
     my $url_bad  = $self->url_bad;
 
-    if (    $self->check_site($url)
-        and $self->check_parent($url)
-        and $self->check_clean($url) )
-    {
-        $url_path->{$url} = undef;
-        printf "* %s ==> [ADD]\n", $self->remote_rel($url) if $self->verbose;
-        return 1;
+    if ( $self->check_site($url) ) {
+        if ( $self->not_check_parent or $self->check_parent($url) ) {
+            if ( $self->check_clean($url) ) {
+                $url_path->{$url} = undef;
+                printf "* %s ==> [ADD]\n", $self->remote_rel($url)
+                    if $self->verbose;
+                return 1;
+            }
+            else {
+                $url_bad->{$url} = undef;
+                printf "* %s ==> [BAD]\n", $self->remote_rel($url)
+                    if $self->verbose;
+                print "check_clean failed\n" if $self->verbose;
+                return 0;
+            }
+        }
+        else {
+            $url_bad->{$url} = undef;
+            printf "* %s ==> [BAD]\n", $self->remote_rel($url)
+                if $self->verbose;
+            print "check_parent failed\n" if $self->verbose;
+            return 0;
+        }
     }
     else {
         $url_bad->{$url} = undef;
         printf "* %s ==> [BAD]\n", $self->remote_rel($url) if $self->verbose;
+        print "check_site failed\n" if $self->verbose;
         return 0;
     }
 }
@@ -175,16 +198,19 @@ my $working_dir = '.';
 my $ipv6;
 my $avoid_regex = '(affy|encode|multiz|phastCons|phyloP)';
 
+my $not_check_parent = 0;
+
 my $man  = 0;
 my $help = 0;
 
 GetOptions(
-    'help|?'    => \$help,
-    'man'       => \$man,
-    'u|url=s'   => \$main_url,
-    'd|dir=s'   => \$working_dir,
-    'r|regex=s' => \$avoid_regex,
-    '6|ipv6'    => \$ipv6,
+    'help|?'                 => \$help,
+    'man'                    => \$man,
+    'u|url=s'                => \$main_url,
+    'd|dir=s'                => \$working_dir,
+    'r|regex=s'              => \$avoid_regex,
+    '6|ipv6'                 => \$ipv6,
+    'not|not_check_parent' => \$not_check_parent,
 ) or pod2usage(2);
 
 pod2usage(1) if $help;
@@ -212,10 +238,11 @@ my ( $site, $remote_base, $local_base );
 }
 
 my $urlchecker = Urlcheck->new(
-    site        => $site,
-    remote_base => $remote_base,
-    local_base  => $local_base,
-    verbose     => 1,
+    site             => $site,
+    remote_base      => $remote_base,
+    local_base       => $local_base,
+    not_check_parent => $not_check_parent,
+    verbose          => 1,
 );
 print Dump $urlchecker;
 
@@ -267,7 +294,9 @@ sub walking {
             if ( $link->text =~ /Parent Directory/i ) {
                 next;
             }
-            walking( $link->url_abs->as_string, $urlchecker );
+            my $sub_url = $link->url_abs->as_string;
+            print $sub_url, "\n";
+            walking( $sub_url, $urlchecker );
         }
     }
 }

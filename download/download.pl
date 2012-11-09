@@ -208,6 +208,8 @@ sub wget_file {
 
 __END__
 
+=head1 SYNOPSIS
+
 perl download.pl -i _goldenPath_sacCer3_multiz7way_.yml -r gz
 
 perl download.pl -i _goldenPath_sacCer3_multiz7way_.ipv6.yml -r gz -6
