@@ -40,22 +40,22 @@ my $add = {
     PKG_CONFIG_PATH => [qw{ C:\strawberry\c\lib\pkgconfig }],
 };
 
-# GTK related variables
-# Move all gtk files to c/
-my $add_gtk = {
-    GTK_BASEPATH    => qw{ C:\strawberry\gtk },
-    INCLUDE         => [qw{ C:\strawberry\gtk\include }],
-    LIB             => [qw{ C:\strawberry\gtk\lib }],
-    PATH            => [qw{ C:\strawberry\gtk\bin }],
-    PKG_CONFIG_PATH => [qw{ C:\strawberry\gtk\lib\pkgconfig }],
-};
+## GTK related variables
+## Move all gtk files to c/
+#my $add_gtk = {
+#    GTK_BASEPATH    => qw{ C:\strawberry\gtk },
+#    INCLUDE         => [qw{ C:\strawberry\gtk\include }],
+#    LIB             => [qw{ C:\strawberry\gtk\lib }],
+#    PATH            => [qw{ C:\strawberry\gtk\bin }],
+#    PKG_CONFIG_PATH => [qw{ C:\strawberry\gtk\lib\pkgconfig }],
+#};
 
 # Misc variables
 # See the follow link for details
 # http://win32.perl.org/wiki/index.php?title=Environment_Variables
 my $add_misc = {
-    EDITOR => qw{ c:/Tools/vim/gvim.exe },
-    VISUAL => qw{ c:/Tools/vim/gvim.exe },
+    EDITOR => qw{ d:/Tools/vim/gvim.exe },
+    VISUAL => qw{ d:/Tools/vim/gvim.exe },
     HOME   => $ENV{HOMEDRIVE} . $ENV{HOMEPATH},
     PGPLOT_FONT =>
         qw{ C:\strawberry\perl\site\lib\PGPLOT\pgplot_supp\grfont.dat },
@@ -67,21 +67,21 @@ my $add_misc = {
 my $add_others = {
     PATH => [
         qw{
-            c:\Tools\bin
-            c:\Tools\blastplus\bin
-            c:\Tools\muscle
-            c:\Tools\mafft
-            c:\Tools\paml\bin
-            c:\Tools\Primer3
-            c:\Tools\graphviz\bin
-            c:\Tools\MySQL\bin
-            c:\Tools\Git\cmd
-            c:\Tools\CMake\bin
-            c:\Tools\ImageMagick
-            c:\Tools\vim
-            c:\Tools\putty
-            c:\Tools\python
-            c:\Tools\R\bin
+            d:\Tools\bin
+            d:\Tools\blastplus\bin
+            d:\Tools\muscle
+            d:\Tools\mafft
+            d:\Tools\paml\bin
+            d:\Tools\Primer3
+            d:\Tools\hmmer
+            d:\Tools\graphviz\bin
+            d:\Tools\MySQL\bin
+            d:\Tools\Git\cmd
+            d:\Tools\CMake\bin
+            d:\Tools\ImageMagick
+            d:\Tools\vim
+            d:\Tools\putty
+            d:\Tools\R\bin
             d:\wq\Scripts\tool
             }
     ],
@@ -89,7 +89,7 @@ my $add_others = {
 
 # Actually do things
 add($add)        and print "Set INCLUDE, LIB and PATH\n";
-add($add_gtk)    and print "Set GTK related variables\n";
+#add($add_gtk)    and print "Set GTK related variables\n";
 add($add_misc)   and print "Set misc variables\n";
 add($add_others) and print "Set other bin paths\n";
 
