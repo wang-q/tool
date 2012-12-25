@@ -1,17 +1,31 @@
 #!/usr/bin/perl
 package GmailNotifier;
 use Moose;
+with 'MooseX::Getopt';
+
 use AnyEvent;
 use AnyEvent::Gmail::Feed;
 use Growl::GNTP;
 
 use FindBin;
 
-with 'MooseX::Getopt';
-
-has 'username' => ( is => 'rw', isa => 'Str', required => 1 );
-has 'password' => ( is => 'rw', isa => 'Str', required => 1 );
-has 'interval' => ( is => 'rw', isa => 'Int', default  => 60 );
+has 'username' => (
+    is            => 'rw',
+    isa           => 'Str',
+    default       => 'wangqiang1997@gmail.com',
+    traits        => ['Getopt'],
+    cmd_aliases   => [qw{ u }],
+    documentation => "email account",
+);
+has 'password' => (
+    is            => 'rw',
+    isa           => 'Str',
+    traits        => ['Getopt'],
+    required      => 1,
+    cmd_aliases   => [qw{ p }],
+    documentation => "email password",
+);
+has 'interval' => ( is => 'rw', isa => 'Int', default => 60 );
 
 binmode STDOUT if $^O eq 'MSWin32';
 
@@ -28,9 +42,9 @@ sub run {
         on_new_entry => sub {
             my $entry = shift;
             print "[Unread mail] \n",
-              "[Title] " . $entry->title . "\n",
-              "[Message] " . $entry->summary . "\n",
-              "\n";
+                "[Title] " . $entry->title . "\n",
+                "[Message] " . $entry->summary . "\n",
+                "\n";
             $growl->notify(
                 Event   => "gmail",
                 Title   => $entry->title,
