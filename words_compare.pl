@@ -23,7 +23,7 @@ elsif ( $op =~ /^uni/i ) {
     $set_new = $set1->union($set2);
 }
 elsif ( $op =~ /^int/i ) {
-    $set_new = $set1->union($set2);
+    $set_new = $set1->intersection($set2);
 }
 
 my $out_file = sprintf "[%s].%s.[%s].txt", basename($file1), $op,
