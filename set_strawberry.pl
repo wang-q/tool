@@ -40,16 +40,6 @@ my $add = {
     PKG_CONFIG_PATH => [qw{ C:\strawberry\c\lib\pkgconfig }],
 };
 
-## GTK related variables
-## Move all gtk files to c/
-#my $add_gtk = {
-#    GTK_BASEPATH    => qw{ C:\strawberry\gtk },
-#    INCLUDE         => [qw{ C:\strawberry\gtk\include }],
-#    LIB             => [qw{ C:\strawberry\gtk\lib }],
-#    PATH            => [qw{ C:\strawberry\gtk\bin }],
-#    PKG_CONFIG_PATH => [qw{ C:\strawberry\gtk\lib\pkgconfig }],
-#};
-
 # Misc variables
 # See the follow link for details
 # http://win32.perl.org/wiki/index.php?title=Environment_Variables
@@ -81,7 +71,9 @@ my $add_others = {
             d:\Tools\ImageMagick
             d:\Tools\vim
             d:\Tools\putty
+            d:\Tools\python
             d:\Tools\R\bin
+            d:\Tools\ruby\bin
             d:\wq\Scripts\tool
             }
     ],
