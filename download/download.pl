@@ -22,7 +22,6 @@ use AlignDB::Run;
 my $file_yaml;
 my $path_regex = '.';
 my $ipv6;
-my $wget;     # use wget instead of LWP
 my $aria2;    # generate a aria2 input file
 
 my $man  = 0;
@@ -34,7 +33,6 @@ GetOptions(
     'i|input=s' => \$file_yaml,
     'r|regex=s' => \$path_regex,
     '6|ipv6'    => \$ipv6,
-    'w|wget'    => \$wget,
     'a|aria2'   => \$aria2,
 ) or pod2usage(2);
 
@@ -85,89 +83,46 @@ for my $url ( sort keys %{$url_path} ) {
     push @jobs, [ $url, $path ];
 }
 
-my $worker = sub {
-    my $job = shift;
-    my $opt = shift;
+if ($aria2) {    # aria2
+    for my $job (@jobs) {
+        my ( $url, $path ) = @{$job};
+        printf "* URL: %s\n" . "* LOCAL: %s\n", $url, $path;
 
-    my ( $url, $path ) = @{$job};
-    printf "* URL: %s\n" . "* LOCAL: %s\n", $url, $path;
+        my $str;
+        $str .= "$url\n";
 
-    if ( $wget or $aria2 ) {    # wget or aria2
-        my ( $is_success, $rsize, $rmtime ) = get_headers($url);
-        if ($is_success) {
-            if ( -e $path and $rsize and $rmtime ) {
-                my ( $lsize, $lmtime ) = ( stat($path) )[ 7, 9 ];
-                if ( $rsize == $lsize or $rmtime <= $lmtime ) {
-                    printf "* SKIP: %s\n\n", "Already download successly";
-                    return;
-                }
-            }
-        }
-        else {
-            printf "* WARN: %s\n\n", "Can't get headers from URL";
-            return;
-        }
+        my $file = file($path);
+        $str .= "  dir=" . $file->dir->stringify . "\n";
+        $str .= "  out=" . $file->basename . "\n";
 
-        unlink $path if -e $path;
-
-        if ($wget) {
-
-            # wget exit status
-            my $error_of = {
-                0 => "No problems occurred",
-                1 => "Generic error code",
-                2 => "Parse error¡ªfor instance",
-                3 => "File I/O error",
-                4 => "Network failure",
-                5 => "SSL verification failure",
-                6 => "Username/password authentication failure",
-                7 => "Protocol errors",
-                8 => "Server issued an error response",
-            };
-
-            my $rc = wget_file( $url, $path );
-            if ( defined $rc ) {
-                if ( $rc == 0 ) {
-                    utime $rmtime, $rmtime, $path if $rmtime;
-                }
-                printf "* WGET: %s\n\n",
-                    $error_of->{$rc} ? $error_of->{$rc} : $rc;
-            }
-            printf "* WGET: %s\n\n", "Something goes wrong";
-        }
-        elsif ($aria2) {
-            my $str;
-            $str .= "$url\n";
-
-            my $file = file($path);
-            $str .= "  dir=" . $file->dir->stringify . "\n";
-            $str .= "  out=" . $file->basename . "\n";
-
-            trylock($aria2_file);
-            open my $fh, '>>', $aria2_file;
-            print {$fh} $str;
-            close $fh;
-            unlock($aria2_file);
-        }
-    }
-    else {    # LWP
-        my $rc = get_file( $url, $path );
-        printf "* RC: %s\n\n", $rc;
+        open my $fh, '>>', $aria2_file;
+        print {$fh} $str;
+        close $fh;
     }
 
-    return;
-};
-
-my $run = AlignDB::Run->new(
-    parallel => $parallel,
-    jobs     => \@jobs,
-    code     => $worker,
-);
-$run->run;
-
-if ($aria2) {
     print "\nRun something like the following command to start downloading.\n";
     print "aria2c -x 12 -s 4 -i $aria2_file\n";
+}
+else {    # LWP
+    my $worker = sub {
+        my $job = shift;
+        my $opt = shift;
+
+        my ( $url, $path ) = @{$job};
+        printf "* URL: %s\n" . "* LOCAL: %s\n", $url, $path;
+
+        my $rc = get_file( $url, $path );
+        printf "* RC: %s\n\n", $rc;
+
+        return;
+    };
+
+    my $run = AlignDB::Run->new(
+        parallel => $parallel,
+        jobs     => \@jobs,
+        code     => $worker,
+    );
+    $run->run;
 }
 
 #----------------------------#
@@ -178,31 +133,6 @@ sub get_file {
     my $filename = shift;
 
     my $rc = mirror( $url, $filename );
-    return $rc;
-}
-
-sub get_headers {
-    my $url = shift;
-
-    my $ua = LWP::UserAgent->new( timeout => 10 );
-
-    my $res = $ua->head($url);
-    if ( $res->is_success ) {
-        my $h = $res->headers;
-        return ( 1, $h->content_length, $h->last_modified );
-    }
-
-    return ( 0, undef, undef );
-}
-
-# self compiled wget, with ipv6 supported
-sub wget_file {
-    my $url      = shift;
-    my $filename = shift;
-
-    my $cmd = "wget $url -O \"$filename\" -q";
-    my $rc  = system($cmd );
-
     return $rc;
 }
 
