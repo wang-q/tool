@@ -11,7 +11,6 @@ use LWP::Simple;
 use LWP::UserAgent;
 use Path::Class;
 use File::Path qw(make_path);
-use LockFile::Simple qw(lock trylock unlock);
 
 use AlignDB::Run;
 
@@ -24,16 +23,18 @@ my $path_regex = '.';
 my $ipv6;
 my $aria2;    # generate a aria2 input file
 
+my $parallel = 4;    # parallel lwp download
+
 my $man  = 0;
 my $help = 0;
 
 GetOptions(
-    'help|?'    => \$help,
-    'man'       => \$man,
-    'i|input=s' => \$file_yaml,
-    'r|regex=s' => \$path_regex,
-    '6|ipv6'    => \$ipv6,
-    'a|aria2'   => \$aria2,
+    'help|?'     => \$help,
+    'man'        => \$man,
+    'i|input=s'  => \$file_yaml,
+    'r|regex=s'  => \$path_regex,
+    'a|aria2'    => \$aria2,
+    'parallel=i' => \$parallel,
 ) or pod2usage(2);
 
 pod2usage(1) if $help;
@@ -42,13 +43,6 @@ pod2usage( -exitstatus => 0, -verbose => 2 ) if $man;
 #----------------------------------------------------------#
 # init
 #----------------------------------------------------------#
-# When downloading from an IPV6 site, we require this package
-# It's not compatible with IPV4 sites
-if ($ipv6) {
-    require Net::INET6Glue::INET_is_INET6;
-}
-
-my $parallel = 4;
 
 my $dispatch  = LoadFile($file_yaml);
 my $dir_to_mk = $dispatch->{dir_to_mk};

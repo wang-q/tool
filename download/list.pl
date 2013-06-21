@@ -195,7 +195,6 @@ my $cmdline = join " ", ( $0, @ARGV );
 my $main_url;
 
 my $working_dir = '.';
-my $ipv6;
 my $avoid_regex = '(affy|encode|multiz|phastCons|phyloP)';
 
 my $not_check_parent = 0;
@@ -204,13 +203,12 @@ my $man  = 0;
 my $help = 0;
 
 GetOptions(
-    'help|?'                 => \$help,
-    'man'                    => \$man,
-    'u|url=s'                => \$main_url,
-    'd|dir=s'                => \$working_dir,
-    'r|regex=s'              => \$avoid_regex,
-    '6|ipv6'                 => \$ipv6,
-    'not|not_check_parent' => \$not_check_parent,
+    'help|?'               => \$help,
+    'man'                  => \$man,
+    'u|url=s'              => \$main_url,
+    'd|dir=s'              => \$working_dir,
+    'r|regex=s'            => \$avoid_regex,
+    'ncp|not_check_parent' => \$not_check_parent,
 ) or pod2usage(2);
 
 pod2usage(1) if $help;
@@ -219,12 +217,6 @@ pod2usage( -exitstatus => 0, -verbose => 2 ) if $man;
 #----------------------------------------------------------#
 # init
 #----------------------------------------------------------#
-# When downloading from an IPV6 site, we require this package
-# It's not compatible with IPV4 sites
-if ($ipv6) {
-    require Net::INET6Glue::INET_is_INET6;
-}
-
 my ( $site, $remote_base, $local_base );
 {
     my ( $scheme, $auth, $path, $query, $frag ) = uri_split($main_url);
@@ -258,7 +250,7 @@ my $yamlfile;
 {
     $urlchecker->convert_all;
     $yamlfile = join "_", grep {/[\w-]/} split /\//, $remote_base;
-    my $ext = $ipv6 ? '.ipv6.yml' : '.yml';
+    my $ext = '.yml';
 
     $yamlfile = File::Spec->catfile( $working_dir, $yamlfile . $ext );
     DumpFile(
