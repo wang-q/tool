@@ -171,14 +171,14 @@ sub skip_filter {
 
     # skip these modules
     my @skips = qw {
-		Ace BerkeleyDB Bio::Perl Cairo Data DB_File DBD::mysql Devel::Cover
-		Devel::NYTProf Event Glib Goo::Canvas Graphviz Gtk2 KinoSearch IO::AIO
-		IO::Socket::SSL Image::Magick Math::Pari Net::Ping Net::SSH2
-		POE::Loop::Gtk PPM Pango Perl PerlCryptLib Term::ReadLine
-		Test::Dependencies Text::Iconv Time::y2038 Win32API::Registry
-		Wx::GLCanvas XML::Parser::Style::EasyTree mod_perl Module::ScanDeps
-		Net::Server XML::LibXML Growl::GNTP Getopt::Lucid Math::BigInt::GMP
-		Math::MPC Math::MPFR
+		Ace BerkeleyDB Bio Bio::Perl Cairo Data DB_File DBD::mysql Devel::Cover
+		Devel::NYTProf Event GD Glib Goo::Canvas Graphviz Growl::GNTP
+		Getopt::Lucid Gtk2 KinoSearch IO::AIO IO::Socket::SSL Image::Magick
+		Math::Pari Math::BigInt::GMP Math::MPC Math::MPFR Module::ScanDeps
+		Net::Ping Net::Server Net::SSH2 OpenGL POE::Loop::Gtk PPM Pango Perl
+		PerlCryptLib Probe::Perl Socket Term::ReadLine Test::Dependencies Text
+		Text::Iconv Time::y2038 Win32API::Registry Wx Wx::GLCanvas
+		Wx::PdfDocument XML::Parser::Style::EasyTree mod_perl XML::LibXML 
     };
 
     my @skips_qr = ( qr/compress/i, qr/SOAP/, qr/PDL/ );

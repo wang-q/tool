@@ -57,23 +57,24 @@ my $add_misc = {
 my $add_others = {
     PATH => [
         qw{
-            d:\Tools\bin
-            d:\Tools\blastplus\bin
-            d:\Tools\muscle
-            d:\Tools\mafft
-            d:\Tools\paml\bin
-            d:\Tools\Primer3
-            d:\Tools\hmmer
-            d:\Tools\graphviz\bin
-            d:\Tools\MySQL\bin
-            d:\Tools\Git\cmd
-            d:\Tools\CMake\bin
-            d:\Tools\ImageMagick
-            d:\Tools\vim
-            d:\Tools\putty
-            d:\Tools\python
-            d:\Tools\R\bin
-            d:\Tools\ruby\bin
+            d:\tools\bin
+            d:\tools\blastplus\bin
+            d:\tools\muscle
+            d:\tools\mafft
+            d:\tools\paml\bin
+            d:\tools\Primer3
+            d:\tools\graphviz\bin
+            d:\tools\gnuplot\bin
+            d:\tools\mysql\bin
+            d:\tools\Git\cmd
+            d:\tools\CMake\bin
+            d:\tools\ImageMagick
+            d:\tools\vim
+            d:\tools\putty
+            c:\python27
+            d:\tools\R\bin
+            d:\tools\ruby\bin
+            d:\tools\miktex-portable-2.9.4757\miktex\bin\
             d:\wq\Scripts\tool
             }
     ],
