@@ -74,6 +74,7 @@ my $add_others = {
             c:\python27
             d:\tools\R\bin
             d:\tools\ruby\bin
+            d:\tools\scala\bin
             d:\tools\miktex-portable-2.9.4757\miktex\bin\
             d:\wq\Scripts\tool
             }
@@ -82,7 +83,6 @@ my $add_others = {
 
 # Actually do things
 add($add)        and print "Set INCLUDE, LIB and PATH\n";
-#add($add_gtk)    and print "Set GTK related variables\n";
 add($add_misc)   and print "Set misc variables\n";
 add($add_others) and print "Set other bin paths\n";
 
