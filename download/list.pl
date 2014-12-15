@@ -189,9 +189,6 @@ use File::Spec;
 #----------------------------------------------------------#
 # GetOpt section
 #----------------------------------------------------------#
-my $cmdline = join " ", ( $0, @ARGV );
-
-# running options
 my $main_url;
 
 my $working_dir = '.';
@@ -202,13 +199,16 @@ my $not_check_parent = 0;
 my $man  = 0;
 my $help = 0;
 
+# store command line before GetOptions
+my $cmdline = join " ", ( $0, @ARGV );
+
 GetOptions(
-    'help|?'               => \$help,
-    'man'                  => \$man,
-    'u|url=s'              => \$main_url,
-    'd|dir=s'              => \$working_dir,
-    'r|regex=s'            => \$avoid_regex,
-    'ncp|not_check_parent' => \$not_check_parent,
+    'help|?'    => \$help,
+    'man'       => \$man,
+    'u|url=s'   => \$main_url,
+    'd|dir=s'   => \$working_dir,
+    'r|regex=s' => \$avoid_regex,
+    'ncp'       => \$not_check_parent,
 ) or pod2usage(2);
 
 pod2usage(1) if $help;
@@ -236,23 +236,25 @@ my $urlchecker = Urlcheck->new(
     not_check_parent => $not_check_parent,
     verbose          => 1,
 );
+print "URL checker opt:\n";
 print Dump $urlchecker;
 
 #----------------------------------------------------------#
 # run
 #----------------------------------------------------------#
-printf "URL: %s\n",         $main_url;
-printf "WORKING DIR: %s\n", $working_dir;
+printf "\nURL: %s\n",           $main_url;
+printf "\nWORKING DIR: %s\n\n", $working_dir;
+
+# Recursive walking
 walking( $main_url, $urlchecker );
 
-# convert remote url to local path
-my $yamlfile;
 {
+    # convert remote url to local path
     $urlchecker->convert_all;
-    $yamlfile = join "_", grep {/[\w-]/} split /\//, $remote_base;
-    my $ext = '.yml';
 
-    $yamlfile = File::Spec->catfile( $working_dir, $yamlfile . $ext );
+    # Dump file as outputs
+    my $yamlfile = join "_", grep {/[\w-]/} split /\//, $remote_base;
+    $yamlfile = File::Spec->catfile( $working_dir, $yamlfile . '.yml' );
     DumpFile(
         $yamlfile,
         {   url_path  => $urlchecker->url_path,
@@ -271,24 +273,27 @@ sub walking {
 
     return if $urlchecker->already_met($url);
     return if $urlchecker->add_url($url) != 1;
-    return if $url =~ /\.(rar|7z|bz|zip|gz|tgz)$/i;
+
+    # All these file types are dead ends
+    return if $url =~ /\.(rar|7z|bz|zip|gz|xz|tgz)$/i;
     return if $url =~ /\.(gif|jpg|jpeg|png)$/i;
     return if $url =~ /\.(md5|txt|sql)$/i;
-    return if $url =~ /\.(2bit|lav|axt|fa|fasta|fastq)$/i;
+    return if $url =~ /\.(2bit|lav|axt|fa|fq|fasta|fastq)$/i;
     return if $url =~ /\.(bb|nh|mod)$/i;
     return if $url =~ /$avoid_regex/i;
 
     if ( is_html($url) ) {
         my $mech = get_page_obj($url);
         return unless $mech;
-        my @links = $mech->find_all_links();
+        my @links = $mech->find_all_links;
         for my $link (@links) {
-            if ( $link->text =~ /Parent Directory/i ) {
-                next;
-            }
-            my $sub_url = $link->url_abs->as_string;
-            print $sub_url, "\n";
-            walking( $sub_url, $urlchecker );
+
+            # Apache html dir
+            next if $link->text =~ /Parent Directory/i;
+
+            my $link_url = $link->url_abs->as_string;
+            print $link_url, "\n";
+            walking( $link_url, $urlchecker );
         }
     }
 }
@@ -312,3 +317,11 @@ sub get_page_obj {
 }
 
 1;
+
+__END__
+
+=head1 SYNOPSIS
+
+perl list.pl -u http://mus.well.ox.ac.uk/19genomes/fasta/
+
+Don't include index.html in URL.

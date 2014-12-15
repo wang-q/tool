@@ -12,7 +12,7 @@ use LWP::UserAgent;
 use Path::Class;
 use File::Path qw(make_path);
 
-use AlignDB::Run;
+use MCE;
 
 #----------------------------------------------------------#
 # GetOpt section
@@ -20,7 +20,6 @@ use AlignDB::Run;
 # running options
 my $file_yaml;
 my $path_regex = '.';
-my $ipv6;
 my $aria2;    # generate a aria2 input file
 
 my $parallel = 4;    # parallel lwp download
@@ -43,7 +42,6 @@ pod2usage( -exitstatus => 0, -verbose => 2 ) if $man;
 #----------------------------------------------------------#
 # init
 #----------------------------------------------------------#
-
 my $dispatch  = LoadFile($file_yaml);
 my $dir_to_mk = $dispatch->{dir_to_mk};
 my $url_path  = $dispatch->{url_path};
@@ -98,25 +96,19 @@ if ($aria2) {    # aria2
     print "aria2c -x 12 -s 4 -i $aria2_file\n";
 }
 else {    # LWP
-    my $worker = sub {
-        my $job = shift;
-        my $opt = shift;
+    my $mce = MCE->new( chunk_size => 1, max_workers => $parallel, );
 
-        my ( $url, $path ) = @{$job};
-        printf "* URL: %s\n" . "* LOCAL: %s\n", $url, $path;
-
-        my $rc = get_file( $url, $path );
-        printf "* RC: %s\n\n", $rc;
-
-        return;
-    };
-
-    my $run = AlignDB::Run->new(
-        parallel => $parallel,
-        jobs     => \@jobs,
-        code     => $worker,
+    $mce->foreach(
+        \@jobs,
+        sub {
+            my ( $self, $chunk_ref, $chunk_id ) = @_;
+            my ( $url, $path ) = @{ $chunk_ref->[0] };
+            my $rc = get_file( $url, $path );
+            printf "* No. %d\n", $chunk_id;
+            printf "* URL: %s\n" . "* LOCAL: %s\n", $url, $path;
+            printf "* RC: %s\n\n", $rc;
+        }
     );
-    $run->run;
 }
 
 #----------------------------#
@@ -136,7 +128,5 @@ __END__
 
 perl download.pl -i _goldenPath_sacCer3_multiz7way_.yml -r gz
 
-perl download.pl -i _goldenPath_sacCer3_multiz7way_.ipv6.yml -r gz -6
-
 >perl download.pl -i 19genomes_fasta.yml -a
->c:\tools\aria2\aria2c -x 12 -s 4 -i D:\wq\Scripts\tool\download\19genomes_fasta.yml.txt
+>d:\tools\bin\aria2c -x 12 -s 4 -i D:\wq\Scripts\tool\download\19genomes_fasta.yml.txt
