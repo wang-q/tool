@@ -1,0 +1,35 @@
+blib/
+_build/
+cover_db/
+inc/
+Build
+Build.bat
+.last_cover_stats
+Makefile
+Makefile.old
+MANIFEST.bak
+META.yml
+MYMETA.yml
+nytprof.out
+pm_to_blib
+
+doc/
+
+*.xls
+*.xlsx
+*.csv
+*.bak
+*.fa
+*.fas
+*.fasta
+
+*.yml
+*.txt
+
+# put any other files you don't want to check in here,
+# such as .DS_Store (OSX), *.bak, etc.
+.DS_Store
+*.log
+*.bak
+*.swp
+

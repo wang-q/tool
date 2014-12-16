@@ -2,6 +2,7 @@
 use strict;
 use warnings;
 
+use List::MoreUtils qw(uniq);
 use Win32;
 use Win32::Env;
 
@@ -21,31 +22,40 @@ my $add = {
     INCLUDE => [
         qw{
             C:\strawberry\c\include
+            C:\strawberry\gtk\include
             C:\strawberry\perl\lib\CORE
             }
     ],
     LIB => [
         qw{
             C:\strawberry\c\lib
+            C:\strawberry\gtk\lib
             C:\strawberry\perl\bin
             }
     ],
     PATH => [
         qw{
             C:\strawberry\c\bin
+            C:\strawberry\gtk\bin
             C:\strawberry\perl\bin
             C:\strawberry\perl\site\bin
             }
     ],
-    PKG_CONFIG_PATH => [qw{ C:\strawberry\c\lib\pkgconfig }],
+    PKG_CONFIG_PATH => [
+        qw{
+            C:\strawberry\c\lib\pkgconfig
+            C:\strawberry\gtk\lib\pkgconfig
+            }
+    ],
+    GTK_BASEPATH => qw{ C:\strawberry\gtk },
 };
 
 # Misc variables
 # See the follow link for details
 # http://win32.perl.org/wiki/index.php?title=Environment_Variables
 my $add_misc = {
-    EDITOR => qw{ d:/Tools/vim/gvim.exe },
-    VISUAL => qw{ d:/Tools/vim/gvim.exe },
+    EDITOR => qw{ d:/tools/vim/gvim.exe },
+    VISUAL => qw{ d:/tools/vim/gvim.exe },
     HOME   => $ENV{HOMEDRIVE} . $ENV{HOMEPATH},
     PGPLOT_FONT =>
         qw{ C:\strawberry\perl\site\lib\PGPLOT\pgplot_supp\grfont.dat },
@@ -58,6 +68,7 @@ my $add_others = {
     PATH => [
         qw{
             d:\tools\bin
+            d:\tools\blast\bin
             d:\tools\blastplus\bin
             d:\tools\muscle
             d:\tools\mafft
@@ -71,11 +82,16 @@ my $add_others = {
             d:\tools\ImageMagick
             d:\tools\vim
             d:\tools\putty
-            c:\python27
+            c:\Python27
+            c:\Python27\Scripts
+            d:\tools\java\bin
             d:\tools\R\bin
             d:\tools\ruby\bin
             d:\tools\scala\bin
-            d:\tools\miktex-portable-2.9.4757\miktex\bin\
+            d:\tools\llvm\bin
+            d:\tools\miktex-portable-2.9.4757\miktex\bin
+            d:\tools\phantomjs
+            d:\tools\sbt
             d:\wq\Scripts\tool
             }
     ],
@@ -108,6 +124,7 @@ sub add {
                 @exists = grep { lc $add ne lc $_ } @exists;
                 push @exists, $add;
             }
+            @exists = uniq(@exists);
             SetEnv( ENV_SYSTEM, $key, join( ';', @exists ) );
         }
         else {
