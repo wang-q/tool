@@ -54,8 +54,6 @@ my $add = {
 # See the follow link for details
 # http://win32.perl.org/wiki/index.php?title=Environment_Variables
 my $add_misc = {
-    EDITOR => qw{ d:/tools/vim/gvim.exe },
-    VISUAL => qw{ d:/tools/vim/gvim.exe },
     HOME   => $ENV{HOMEDRIVE} . $ENV{HOMEPATH},
     PGPLOT_FONT =>
         qw{ C:\strawberry\perl\site\lib\PGPLOT\pgplot_supp\grfont.dat },
@@ -63,36 +61,12 @@ my $add_misc = {
     PROJ_LIB   => qw{ c:\strawberry\perl\site\lib\PDL\proj_supp },
 };
 
-# Other bin paths in D:\Tools
+# Other bin paths
 my $add_others = {
     PATH => [
         qw{
-            d:\tools\bin
-            d:\tools\blast\bin
-            d:\tools\blastplus\bin
-            d:\tools\muscle
-            d:\tools\mafft
-            d:\tools\paml\bin
-            d:\tools\Primer3
-            d:\tools\graphviz\bin
-            d:\tools\gnuplot\bin
-            d:\tools\mysql\bin
-            d:\tools\Git\cmd
-            d:\tools\CMake\bin
-            d:\tools\ImageMagick
-            d:\tools\vim
-            d:\tools\putty
             c:\Python27
             c:\Python27\Scripts
-            d:\tools\java\bin
-            d:\tools\R\bin
-            d:\tools\ruby\bin
-            d:\tools\scala\bin
-            d:\tools\llvm\bin
-            d:\tools\miktex-portable-2.9.4757\miktex\bin
-            d:\tools\phantomjs
-            d:\tools\sbt
-            d:\wq\Scripts\tool
             }
     ],
 };
@@ -134,3 +108,6 @@ sub add {
 
     return 1;
 }
+
+__END__
+
