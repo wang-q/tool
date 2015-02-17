@@ -13,7 +13,7 @@ use Archive::Zip qw( :ERROR_CODES :CONSTANTS );
 #----------------------------------------------------------#
 # GetOpt section
 #----------------------------------------------------------#
-my $backup_dir = dir( 'd:', 'software', 'Backup', 'PC' )->stringify;
+my $backup_dir = dir( 'd:\\', 'software', 'Backup', 'PC' )->stringify;
 
 my $man  = 0;
 my $help = 0;
@@ -65,20 +65,20 @@ my %backup_of = (
         ],
     },
 
-    Scripts => { dir => [ dir( 'd:', 'Scripts' ), ], },
+    Scripts => { dir => [ dir( 'd:\\', 'Scripts' ), ], },
 
-    zotero => { dir => [ dir( 'd:', 'zotero' ), ], },
+    zotero => { dir => [ dir( 'd:\\', 'zotero' ), ], },
 
     ultraedit => {
         dir => [
-            dir( 'c:', 'Program Files (x86)', 'IDM Computer Solutions' ),
+            dir( 'c:\\', 'Program Files (x86)', 'IDM Computer Solutions' ),
             dir( $ENV{APPDATA}, 'IDMComp' ),
         ],
     },
 
     beyondcompare => {
         dir => [
-            dir( 'c:',          'Program Files (x86)', 'Beyond Compare 3' ),
+            dir( 'c:\\',        'Program Files (x86)', 'Beyond Compare 3' ),
             dir( $ENV{APPDATA}, 'Scooter Software' ),
         ],
     },
@@ -95,11 +95,10 @@ my %backup_of = (
 
     bioinfo => {
         dir => [
-            dir('c:\Tools\clustalw1.83.XP'), dir('c:\Tools\clustalx1.81'),
-            dir('c:\Tools\HYPHY'),           dir('c:\Tools\muscle'),
-            dir('c:\Tools\paml'),            dir('c:\Tools\PAUP'),
-            dir('c:\Tools\phylip'),          dir('c:\Tools\Primer3'),
-            dir('c:\Tools\ProSeq'),          dir('c:\Tools\readseq'),
+            dir('c:\Tools\clustalw1.83.XP'), dir('c:\Tools\HYPHY'),
+            dir('c:\Tools\muscle'),          dir('c:\Tools\paml'),
+            dir('c:\Tools\PAUP'),            dir('c:\Tools\phylip'),
+            dir('c:\Tools\Primer3'),         dir('c:\Tools\ProSeq'),
         ],
     },
 
