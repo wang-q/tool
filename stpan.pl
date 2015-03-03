@@ -29,30 +29,46 @@ my @els = grep {defined} split /\n/, $string;
 
 my @not_found;
 my @found;
+my @bio;
 
 for my $el (@els) {
     print $el, "\n";
+
+    my $module = $el;
+    $module =~ s/\-.[v\d\._]+$//;
+    $module =~ s/-/::/g;
+
     my @gzs = grep { index( $_, "/$el" ) != -1 } @all_files;
-    if ( @gzs == 0 ) {
-        my $module = $el;
-        $module =~ s/\-.[v\d\._]+$//;
-        $module =~ s/-/::/g;
+
+    if ( $el =~ /Bio|AlignDB/ ) {
+        push @bio, $el;
+    }
+    elsif ( @gzs == 0 ) {
         push @not_found, $module;
     }
+    elsif ( $el =~ /libwww/ ) {
+        push @found, 'LWP::Simple';
+    }
     else {
-        push @found, $gzs[0];
+        push @found, $module;
     }
 }
 
 open my $fh, '>', 'stpan.txt';
 
 for my $el (@found) {
-    print {$fh} "cpanm --verbose $el\n";
+    print {$fh} "cpanm --verbose --mirror-only --mirror ~/minicpan $el\n";
 }
 
 for my $el (@not_found) {
     print {$fh}
         "cpanm --verbose --mirror-only --mirror https://stratopan.com/wangq/alignDB/master $el\n";
+}
+
+for my $el (@bio) {
+    print {$fh}
+        "# cpanm --verbose --mirror-only --mirror https://stratopan.com/wangq/alignDB/master $el\n";
+
 }
 
 close $fh;
