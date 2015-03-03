@@ -36,26 +36,33 @@ else {    # find out all ascii file
     @files = File::Find::Rule->file->ascii->in($dir);
 }
 
-$find    = quotemeta $find;
-$replace = $replace;
+my $find_qr    = quotemeta $find;
+my $replace_qr = quotemeta $replace;
 
 for my $file (@files) {
+    print "File: [$file]\n";
 
-    # read in
-    open my $in_fh, "<", $file;
-    my $content = do { local $/; <$in_fh> };
-    close $in_fh;
+    if ( defined $find ) {
 
-    # replace
-    my $times = $content =~ s/$find/$replace/g;
-    next unless $times;
-    print "Replace $times times in $file\n";
+        # read in
+        open my $in_fh, "<", $file;
+        my $content = do { local $/; <$in_fh> };
+        close $in_fh;
 
-    # write out
-    open my $out_fh, ">", $file;
-    print {$out_fh} $content;
-    close $out_fh;
-    print "\n";
+        # replace
+        my $times = $content =~ s/$find_qr/$replace_qr/g;
+        next unless $times;
+        print "Replace $times times in $file\n";
+
+        # write out
+        open my $out_fh, ">", $file;
+        print {$out_fh} $content;
+        close $out_fh;
+        print "\n";
+    }
+    else {
+        print " " x 4, "Nothing to do.\n";
+    }
 }
 
 exit;
