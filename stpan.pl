@@ -8,7 +8,7 @@ use File::Find::Rule;
 use Mojo::DOM;
 use YAML qw(Dump Load DumpFile LoadFile);
 
-my $file = shift || '/Users/wangq/Downloads/wangq_alignDB_master.html';
+my $file = shift || '/Users/wangq/Scripts/tool/wangq_alignDB_master.html';
 die "Provide a valid html file!\n" unless $file;
 
 my $minicpan = '/Users/wangq/minicpan';
@@ -21,55 +21,89 @@ my @all_files
 my $html = read_file($file);
 my $dom  = Mojo::DOM->new($html);
 
-my $string = $dom->find('span.dist-name')->map('text')->join("\n");
-
-#print $string;
-
-my @els = grep {defined} split /\n/, $string;
-
 my @not_found;
 my @found;
-my @bio;
+my @manual;
 
-for my $el (@els) {
-    print $el, "\n";
-
-    my $module = $el;
-    $module =~ s/\-.[v\d\._]+$//;
-    $module =~ s/-/::/g;
-
-    my @gzs = grep { index( $_, "/$el" ) != -1 } @all_files;
-
-    if ( $el =~ /Bio|AlignDB/ ) {
-        push @bio, $el;
+for my $li ( $dom->find('li.dist')->each ) {
+    # Bio-Phylo-0.55
+    my ($name) = grep {defined} split /\n/,
+        $li->find('span.dist-name')->map('text')->join("\n");
+        # (RVOSA)
+    my ($author)
+        = map { s/^\(//; s/\)$//; $_ }
+        grep {defined}
+        split( /\n/, $li->find('span.dist-author')->map('text')->join("\n") );
+    
+    # Bio::Phylo~0.55
+    my $pkgnames = $li->find('span.pkg-name')->map('text')->join("\n");
+    $pkgnames =~ s/\~/-/g;
+    $pkgnames =~ s/\:\:/-/g;
+    $pkgnames =~ s/\n+/\n/g;
+    
+    # When dist name is the main pkgname, use pkgname.
+    # libwww-perl is not fit this condition.
+    my $module;
+    if (index($pkgnames, $name) != -1) {
+        $module = $name;
+        $module =~ s/\-.[v\d\._]+$//;
+        $module =~ s/-/::/g;
     }
-    elsif ( @gzs == 0 ) {
-        push @not_found, $module;
+    
+    my $fullname = "$author/$name";
+    print $fullname, "\n";
+
+    my @gzs = grep { index( $_, $fullname ) != -1 } @all_files;
+    
+    if ( $fullname =~ /Bio|AlignDB/ ) {
+        if ($module) {
+            push @manual, $module;
+        }
+        else {
+            push @manual, $fullname;
+        }
     }
-    elsif ( $el =~ /libwww/ ) {
-        push @found, 'LWP::Simple';
+    elsif ($module) {
+        if ( @gzs == 0 ) {
+            push @not_found, $module;
+        }
+        else {
+            push @found, $module;
+        }
     }
     else {
-        push @found, $module;
+        if ( @gzs == 0 ) {
+            push @manual, $fullname;
+        }
+        else {
+            my $str_idx = index $gzs[0], $fullname;
+            my $dist_name = substr $gzs[0], $str_idx;
+            unshift @manual, $dist_name;
+        }
     }
 }
 
 open my $fh, '>', 'stpan.txt';
 
-for my $el (@found) {
-    print {$fh} "cpanm --verbose --mirror-only --mirror ~/minicpan $el\n";
+print {$fh} "# modules from minicpan\n";
+while ( scalar @found ) {
+    my @batching = splice @found, 0, 20;
+    print {$fh} "cpanm --verbose --mirror-only --mirror ~/minicpan @batching\n";
 }
+print {$fh} "\n";
 
-for my $el (@not_found) {
-    print {$fh}
-        "cpanm --verbose --mirror-only --mirror https://stratopan.com/wangq/alignDB/master $el\n";
+print {$fh} "# modules from stratopan\n";
+while ( scalar @not_found ) {
+    my @batching = splice @not_found, 0, 20;
+    print {$fh} "cpanm --verbose --mirror-only --mirror https://stratopan.com/wangq/alignDB/master @batching\n";
 }
+print {$fh} "\n";
 
-for my $el (@bio) {
+print {$fh} "# modules you should install manually\n";
+for my $el (@manual) {
     print {$fh}
         "# cpanm --verbose --mirror-only --mirror https://stratopan.com/wangq/alignDB/master $el\n";
-
 }
+print {$fh} "\n";
 
 close $fh;
-
