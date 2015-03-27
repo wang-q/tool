@@ -8,10 +8,12 @@ use File::Find::Rule;
 use Mojo::DOM;
 use YAML qw(Dump Load DumpFile LoadFile);
 
-my $file = shift || '/Users/wangq/Scripts/tool/wangq_alignDB_master.html';
+my $file = shift || '~/Scripts/tool/wangq_alignDB_master.html';
 die "Provide a valid html file!\n" unless $file;
 
-my $minicpan = '/Users/wangq/minicpan';
+my $minicpan = shift || '~/minicpan';
+
+my $batch = 30;
 
 # find ~/minicpan -type f | perl -nl -e '/CHECKSUMS/ and next; s/^.*\.//; print' | sort | uniq
 my @all_files
@@ -89,18 +91,23 @@ for my $li ( $dom->find('li.dist')->each ) {
     }
 }
 
+# LWP does not recognize d:/minicpan
+if($minicpan =~ /\:/) {
+    $minicpan = 'file:///' . $minicpan;
+}
+
 open my $fh, '>', 'stpan.txt';
 
 print {$fh} "# modules from minicpan\n";
 while ( scalar @found ) {
-    my @batching = splice @found, 0, 20;
-    print {$fh} "cpanm --verbose --mirror-only --mirror ~/minicpan @batching\n";
+    my @batching = splice @found, 0, $batch;
+    print {$fh} "cpanm --verbose --mirror-only --mirror $minicpan @batching\n";
 }
 print {$fh} "\n";
 
 print {$fh} "# modules from stratopan\n";
 while ( scalar @not_found ) {
-    my @batching = splice @not_found, 0, 20;
+    my @batching = splice @not_found, 0, $batch;
     print {$fh}
         "cpanm --verbose --mirror-only --mirror https://stratopan.com/wangq/alignDB/master @batching\n";
 }
@@ -108,8 +115,8 @@ print {$fh} "\n";
 
 print {$fh} "# dists may be installed repeatedly.\n";
 while ( scalar @dist ) {
-    my @batching = splice @dist, 0, 20;
-    print {$fh} "cpanm --verbose --mirror-only --mirror ~/minicpan @batching\n";
+    my @batching = splice @dist, 0, $batch;
+    print {$fh} "cpanm --verbose --mirror-only --mirror $minicpan @batching\n";
 }
 print {$fh} "\n";
 
@@ -121,3 +128,9 @@ for my $el (@manual) {
 print {$fh} "\n";
 
 close $fh;
+
+__END__
+
+# Windows
+> cd /d d:\Scripts\tool
+> perl stpan.pl wangq_alignDB_master.htm d:/minicpan
