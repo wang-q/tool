@@ -59,7 +59,8 @@ for my $li ( $dom->find('li.dist')->each ) {
     my @gzs = grep { index( $_, $fullname ) != -1 } @all_files;
 
     # bioperl related
-    if ( $fullname =~ /Bio|AlignDB/ ) {
+    # and Win32
+    if ( $fullname =~ /Bio|AlignDB|Win32/ ) {
         if ($module) {
             push @manual, $module;
         }
