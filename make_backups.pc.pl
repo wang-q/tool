@@ -59,7 +59,6 @@ my %backup_of = (
         ],
         file => [
             file( $ENV{USERPROFILE}, '.gitconfig' ),
-            file( $ENV{USERPROFILE}, '.minicpanrc' ),
             file( $ENV{USERPROFILE}, '_vimrc' ),
             file( $ENV{USERPROFILE}, '_vimperatorrc' ),
         ],

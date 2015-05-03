@@ -85,7 +85,6 @@ my %backup_of = (
             file( $ENV{HOME}, '.bash_profile' ),
             file( $ENV{HOME}, '.bashrc' ),
             file( $ENV{HOME}, '.gitconfig' ),
-            file( $ENV{HOME}, '.minicpanrc' ),
             file( $ENV{HOME}, '.ncbirc' ),
             file( $ENV{HOME}, '.wgetrc' ),
             file( $ENV{HOME}, '.screenrc' ),
