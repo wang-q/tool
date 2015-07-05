@@ -35,6 +35,7 @@ my $add = {
             c:\tools\CMake\bin
             c:\tools\ImageMagick
             c:\tools\vim
+            c:\tools\packer
             c:\tools\putty
             c:\tools\R\bin
             }
