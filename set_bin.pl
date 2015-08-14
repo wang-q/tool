@@ -38,6 +38,7 @@ my $add = {
             c:\tools\packer
             c:\tools\putty
             c:\tools\R\bin
+            c:\tools\Vagrant\bin
             }
     ],
 };
