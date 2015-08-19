@@ -27,17 +27,17 @@
     # msys itself
     pacman -S base-devel
     pacman -S msys2-devel
-    pacman -S xz p7zip zip unzip rsync git svn
+    pacman -S xz zip unzip rsync git
 
     # 32bit mingw
-    pacman -S mingw32/mingw-w64-i686-toolchain
+    # pacman -S mingw32/mingw-w64-i686-toolchain
 
     # gtk3
-    pacman -S mingw32/mingw-w64-i686-webkitgtk3
+    pacman -S mingw32/mingw-w64-i686-gtk3
     pacman -S mingw32/mingw-w64-i686-gobject-introspection
 
     # others
-    pacman -S mingw32/mingw-w64-i686-imagemagick
+    # pacman -S mingw32/mingw-w64-i686-imagemagick
 
     # fix .pc files
     find /mingw32/lib/pkgconfig -name "*.pc" \
@@ -93,7 +93,7 @@
 
 ### 清理缓存
 
-* 仅在确定当前安装的软件包足够稳定且不需要降级时才执行清理。旧版本的软件包能系统更新崩溃时派上用场
+* 仅在确定当前安装的软件包足够稳定且不需要降级时才执行清理。旧版本的软件包能在系统更新崩溃时派上用场
 
     `pacman -Sc`
 
