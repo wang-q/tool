@@ -9,7 +9,7 @@ sudo scutil --set HostName yourname
 
 https://github.com/beautifulcode/ssh-copy-id-for-OSX
 
-# dos2unix
+## dos2unix
 
 ```bash
 find . -type f  -not -iname ".*" -not -path "*.git*" \
