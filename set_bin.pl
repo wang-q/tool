@@ -30,6 +30,7 @@ my $add = {
             c:\tools\graphviz\bin
             c:\tools\gnuplot\bin
             c:\tools\gs\bin
+            c:\tools\miktex\miktex\bin
             c:\tools\mysql\bin
             c:\tools\mongodb\bin
             c:\tools\Git\cmd
