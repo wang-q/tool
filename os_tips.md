@@ -44,6 +44,12 @@ echo -n -e "\033]0;In soviet russia, the title bar sets you\007"这是Local Back
 
 http://apple.stackexchange.com/questions/66433/remove-shift-key-augmentation-for-mission-control-animation
 
+## sha1 sum
+
+```bash
+openssl sha1 ~/Documents/1024SecUpd2003-03-03.dmg
+```
+
 # Ubuntu
 
 ## ssh for ubuntu-desktop
