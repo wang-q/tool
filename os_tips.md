@@ -37,8 +37,16 @@ echo -n -e "\033]0;In soviet russia, the title bar sets you\007"这是Local Back
 ## 拼写检查
 
 * Navigate to the Applications folder and open Terminal.
-* Enter open ~/Library/Spelling/ and press Return.
+* Enter `open ~/Library/Spelling/` and press Return.
 * This will open a Finder window. The file LocalDictionary contains the dictionary your Mac uses for spell checking.
+
+## 英文界面 Mac 使用中文界面 Office 的方法
+
+```bash
+defaults write $(mdls -name kMDItemCFBundleIdentifier -raw '/Applications/Microsoft Word.app')  AppleLanguages "(zh-Hans, zh_CN, zh, en)"
+defaults write $(mdls -name kMDItemCFBundleIdentifier -raw '/Applications/Microsoft Excel.app') AppleLanguages "(zh-Hans, zh_CN, zh, en)"
+defaults write $(mdls -name kMDItemCFBundleIdentifier -raw '/Applications/Microsoft PowerPoint.app') AppleLanguages "(zh-Hans, zh_CN, zh, en)"
+```
 
 ## Mission control animations
 
@@ -48,6 +56,18 @@ http://apple.stackexchange.com/questions/66433/remove-shift-key-augmentation-for
 
 ```bash
 openssl sha1 ~/Documents/1024SecUpd2003-03-03.dmg
+```
+
+## Disconnect ethernet adaptor
+
+```bash
+sudo /sbin/ifconfig en0 down
+```
+
+Bring it back
+
+```bash
+sudo /sbin/ifconfig en0 up
 ```
 
 # Ubuntu
