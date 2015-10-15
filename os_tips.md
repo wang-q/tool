@@ -70,6 +70,10 @@ Bring it back
 sudo /sbin/ifconfig en0 up
 ```
 
+## Add public key to github
+
+http://stackoverflow.com/questions/8402281/github-push-error-permission-denied
+
 # Ubuntu
 
 ## ssh for ubuntu-desktop
