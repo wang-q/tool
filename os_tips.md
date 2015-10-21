@@ -1,10 +1,21 @@
 # Mac
 
+## 用screen启动几个常用后台程序
+
+```bash
+screen -dmS op
+screen -S op -x -X screen perl -MPod::POM::Web -e "Pod::POM::Web->server"
+screen -S op -x -X screen redis-server
+screen -S op -x -X screen ~/share/mongodb/bin/mongod --config ~/share/mongodb/mongod.cnf
+screen -S op -x -X screen ~/share/mysql/bin/mysqld_safe
+```
+
 ## 修改mac osx系统的hostname
 
 ```bash
 sudo scutil --set HostName yourname
 ```
+
 ## ssh-copy-id
 
 https://github.com/beautifulcode/ssh-copy-id-for-OSX
