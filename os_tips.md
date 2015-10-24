@@ -6,6 +6,7 @@
 screen -dmS op
 screen -S op -x -X screen perl -MPod::POM::Web -e "Pod::POM::Web->server"
 screen -S op -x -X screen redis-server
+rm ~/share/mongodb/data/mongod.lock
 screen -S op -x -X screen ~/share/mongodb/bin/mongod --config ~/share/mongodb/mongod.cnf
 screen -S op -x -X screen ~/share/mysql/bin/mysqld_safe
 ```
@@ -34,7 +35,7 @@ http://superuser.com/questions/223308/name-terminal-tabs
 Note that "0" sets both the window and the tab title. As of Mac OS X Lion 10.7, you can set them independently, using "1" (tab title) and "2" (window title).
 
 ```bash
-echo -n -e "\033]0;In soviet russia, the title bar sets you\007"这是Local Backup
+echo -n -e "\033]0;In soviet russia, the title bar sets you\007"
 ```
 
 ## Local Backup
