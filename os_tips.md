@@ -60,6 +60,12 @@ defaults write $(mdls -name kMDItemCFBundleIdentifier -raw '/Applications/Micros
 defaults write $(mdls -name kMDItemCFBundleIdentifier -raw '/Applications/Microsoft PowerPoint.app') AppleLanguages "(zh-Hans, zh_CN, zh, en)"
 ```
 
+## RStudio运行时console里locale错误
+
+```bash
+defaults write org.R-project.R force.LANG en_US.UTF-8
+```
+
 ## Mission control animations
 
 http://apple.stackexchange.com/questions/66433/remove-shift-key-augmentation-for-mission-control-animation
