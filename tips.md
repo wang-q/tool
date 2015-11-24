@@ -18,8 +18,7 @@ Ideas from this [SO post](http://stackoverflow.com/questions/3497123/run-git-pul
 * Status of all repos
 
 ```bash
-cd ~/Scripts
-find . -type d -mindepth 1 -maxdepth 3 -name ".git" \
+find ~/Scripts -type d -mindepth 1 -maxdepth 3 -name ".git" \
     | sort \
     | parallel -r -k -j 1 \
     "echo {//}; git -C {//} status; echo ===="
@@ -28,8 +27,7 @@ find . -type d -mindepth 1 -maxdepth 3 -name ".git" \
 * Only show repos needing attentions
 
 ```bash
-cd ~/Scripts
-find . -type d -mindepth 1 -maxdepth 3 -name ".git" \
+find ~/Scripts -type d -mindepth 1 -maxdepth 3 -name ".git" \
     | sort \
     | parallel -r -k -j 1 \
     "echo {//}; git -C {//} status; echo ====" \
