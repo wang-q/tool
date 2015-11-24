@@ -13,6 +13,20 @@ screen -S op -x -X screen ~/share/mysql/bin/mysqld_safe
 
 ## 列出所有子目录的git状态
 
+Ideas from this [SO post](http://stackoverflow.com/questions/3497123/run-git-pull-over-all-subdirectories).
+
+* Status of all repos
+
+```bash
+cd ~/Scripts
+find . -type d -mindepth 1 -maxdepth 3 -name ".git" \
+    | sort \
+    | parallel -r -k -j 1 \
+    "echo {//}; git -C {//} status; echo ===="
+```
+
+* Only show repos needing attentions
+
 ```bash
 cd ~/Scripts
 find . -type d -mindepth 1 -maxdepth 3 -name ".git" \
