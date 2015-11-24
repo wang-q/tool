@@ -20,10 +20,15 @@ find . -type d -mindepth 1 -maxdepth 3 -name ".git" \
     | parallel -r -k -j 1 \
     "echo {//}; git -C {//} status; echo ====" \
     | perl -e '
-        @ls = <>;
-        @sections = split /\=+/, join(q{}, @ls);
+        @lines = <>;
+        @sections = split /\=+/, join("", @lines);
+        print "\n==> Behind\n";
         print for grep {/Your branch is behind/} @sections;
+        print "\n==> Ahead\n";
+        print for grep {/Your branch is ahead/} @sections;
+        print "\n==> Not staged\n";
         print for grep {/Changes not staged for commit/} @sections;
+        print "\n==> Untrack\n";
         print for grep {/Untracked files/} @sections;'
 
 ```
