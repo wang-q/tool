@@ -1,4 +1,4 @@
-# Mac
+# Common
 
 ## 用screen启动几个常用后台程序
 
@@ -46,6 +46,14 @@ find . -type d -mindepth 1 -maxdepth 3 -name ".git" \
         print for grep {/Untracked files/} @sections;'
 
 ```
+
+## sha1 sum
+
+```bash
+openssl sha1 ~/Documents/1024SecUpd2003-03-03.dmg
+```
+
+# Mac
 
 ## 修改mac osx系统的hostname
 
@@ -105,12 +113,6 @@ defaults write org.R-project.R force.LANG en_US.UTF-8
 ## Mission control animations
 
 http://apple.stackexchange.com/questions/66433/remove-shift-key-augmentation-for-mission-control-animation
-
-## sha1 sum
-
-```bash
-openssl sha1 ~/Documents/1024SecUpd2003-03-03.dmg
-```
 
 ## Disconnect ethernet adaptor
 
