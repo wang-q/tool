@@ -11,6 +11,23 @@ screen -S op -x -X screen ~/share/mongodb/bin/mongod --config ~/share/mongodb/mo
 screen -S op -x -X screen ~/share/mysql/bin/mysqld_safe
 ```
 
+## 列出所有子目录的git状态
+
+```bash
+cd ~/Scripts
+find . -type d -mindepth 1 -maxdepth 3 -name ".git" \
+    | sort \
+    | parallel -r -k -j 1 \
+    "echo {//}; git -C {//} status; echo ====" \
+    | perl -e '
+        @ls = <>;
+        @sections = split /\=+/, join(q{}, @ls);
+        print for grep {/Your branch is behind/} @sections;
+        print for grep {/Changes not staged for commit/} @sections;
+        print for grep {/Untracked files/} @sections;'
+
+```
+
 ## 修改mac osx系统的hostname
 
 ```bash
