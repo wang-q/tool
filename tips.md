@@ -30,7 +30,7 @@ find ~/Scripts -type d -mindepth 1 -maxdepth 3 -name ".git" \
 find ~/Scripts -type d -mindepth 1 -maxdepth 3 -name ".git" \
     | sort \
     | parallel -r -k -j 1 \
-    "echo {//}; git -C {//} status; echo ====" \
+        "echo {//}; git -C {//} status; echo ====" \
     | perl -e '
         @lines = <>;
         @sections = split /\=+/, join("", @lines);
