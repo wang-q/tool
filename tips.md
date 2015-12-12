@@ -51,6 +51,14 @@ find ~/Scripts -type d -mindepth 1 -maxdepth 3 -name ".git" \
 openssl sha1 ~/Documents/1024SecUpd2003-03-03.dmg
 ```
 
+## Show ignored files in git
+
+http://stackoverflow.com/questions/466764/show-ignored-files-in-git
+
+```bash
+git ls-files --others -i --exclude-standard
+```
+
 # Mac
 
 ## 修改mac osx系统的hostname
