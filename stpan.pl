@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use autodie;
 
-use File::Slurp;
+use Path::Tiny;
 use File::Find::Rule;
 use Mojo::DOM;
 use YAML qw(Dump Load DumpFile LoadFile);
@@ -16,11 +16,9 @@ my $minicpan = shift || '~/minicpan';
 my $batch = 30;
 
 # find ~/minicpan -type f | perl -nl -e '/CHECKSUMS/ and next; s/^.*\.//; print' | sort | uniq
-my @all_files
-    = File::Find::Rule->file->name( "*.bz2", "*.gz", "*.tgz", "*.zip" )
-    ->in($minicpan);
+my @all_files = File::Find::Rule->file->name( "*.bz2", "*.gz", "*.tgz", "*.zip" )->in($minicpan);
 
-my $html = read_file($file);
+my $html = path($file)->slurp;
 my $dom  = Mojo::DOM->new($html);
 
 # When installing modules in @found, cpanm will upgrade them automatically.
@@ -30,8 +28,7 @@ my ( @not_found, @dist, @manual );
 for my $li ( $dom->find('li.dist')->each ) {
 
     # Bio-Phylo-0.55
-    my ($name) = grep {defined} split /\n/,
-        $li->find('span.dist-name')->map('text')->join("\n");
+    my ($name) = grep {defined} split /\n/, $li->find('span.dist-name')->map('text')->join("\n");
 
     # (RVOSA)
     my ($author) = map { s/^\(//; s/\)$//; $_ }
@@ -93,7 +90,7 @@ for my $li ( $dom->find('li.dist')->each ) {
 }
 
 # LWP does not recognize d:/minicpan
-if($minicpan =~ /\:/) {
+if ( $minicpan =~ /\:/ ) {
     $minicpan = 'file:///' . $minicpan;
 }
 
