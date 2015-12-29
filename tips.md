@@ -59,6 +59,14 @@ http://stackoverflow.com/questions/466764/show-ignored-files-in-git
 git ls-files --others -i --exclude-standard
 ```
 
+## 去掉PDF中的水印
+
+```bash
+cat Graphing\ Data\ with\ R.pdf | grep -v "it\-ebooks" > Graphing_Data_with_R.pdf
+```
+
+用Acrobat打开并保存.
+
 # Mac
 
 ## 修改mac osx系统的hostname
