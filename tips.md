@@ -270,3 +270,9 @@ sudo apt-get install -y mongodb-org
 apt-cache search PACKAGE_NAME
 apt-cache show PACKAGE_NAME
 ```
+
+## Disk usages
+
+```bash
+df -BG
+```
