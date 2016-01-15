@@ -8,6 +8,7 @@ use File::Find::Rule;
 use Mojo::DOM;
 use YAML qw(Dump Load DumpFile LoadFile);
 
+# stratopan contains dynamic contents, Mojo::Useragent doesn't work
 my $file = shift || '~/Scripts/tool/wangq_alignDB_master.html';
 die "Provide a valid html file!\n" unless $file;
 
