@@ -8,6 +8,8 @@ screen -S op -x -X screen perl -MPod::POM::Web -e "server 8888"
 rm ~/share/mongodb/data/mongod.lock
 screen -S op -x -X screen ~/share/mongodb/bin/mongod --config ~/share/mongodb/mongod.cnf
 
+# screen -S op -x -X screen numactl --interleave=all ~/share/mongodb/bin/mongod --config ~/share/mongodb/mongod.cnf
+
 # On OSX, use `launchctl`
 screen -S op -x -X screen redis-server
 screen -S op -x -X screen ~/share/mysql/bin/mysqld_safe
