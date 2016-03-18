@@ -55,6 +55,17 @@ find ~/Scripts -type d -mindepth 1 -maxdepth 3 -name ".git" \
 openssl sha1 ~/Documents/1024SecUpd2003-03-03.dmg
 ```
 
+sha256 need newer version of openssl
+
+```bash
+openssl version # OpenSSL 0.9.8zg 14 July 2015
+
+brew install openssl
+brew link --force openssl
+openssl version # OpenSSL 1.0.2g  1 Mar 2016
+
+```
+
 ## Show ignored files in git
 
 http://stackoverflow.com/questions/466764/show-ignored-files-in-git
