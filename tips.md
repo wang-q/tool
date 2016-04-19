@@ -182,8 +182,9 @@ sudo /etc/init.d/ssh restart
 http://askubuntu.com/questions/518041/unity-doesnt-work-on-vnc-server-under-14-04-lts
 
 ```bash
-sudo apt-get install  tightvncserver
-apt-get install gnome-panel gnome-settings-daemon metacity nautilus gnome-terminal
+sudo apt-get -y update
+sudo apt-get -y install tightvncserver
+sudo apt-get -y install gnome-panel gnome-settings-daemon metacity nautilus gnome-terminal
 ```
 
 Create a customized `~/.vnc/xstartup`.
