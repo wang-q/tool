@@ -159,13 +159,19 @@ sudo /sbin/ifconfig en0 up
 
 http://stackoverflow.com/questions/8402281/github-push-error-permission-denied
 
-# Change the default app that opens all the files of one particular file type.
+## Change the default app that opens all the files of one particular file type.
 
 1. Select the file
 2. CMD-I (Get Info)
 3. Under Open With pick the app that you want to become the default
 4. Click the Change All button
 5. Confirm your decision
+
+## 禁止深度睡眠
+
+1. `sudo pmset -a hibernatemode 0`
+2. Reboot
+3. Remove `/private/var/vm/sleepimage` is present.
 
 # Ubuntu
 
