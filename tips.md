@@ -66,6 +66,22 @@ openssl version # OpenSSL 1.0.2g  1 Mar 2016
 
 ```
 
+## Extract bash codes from this markdown file.
+
+```bash
+echo '#!/usr/bin/env bash' > file.md.sh
+
+cat file.md \
+    | perl -e '
+        @lines = <>;
+        $content = join "", @lines;
+        while ($content =~ /^`{3,}bash\s*\n(.*?)^`{3,}\s*\n/msg) {
+            printf "%s\n", $1;
+        }
+    ' \
+    >> file.md.sh
+```
+
 ## Show ignored files in git
 
 http://stackoverflow.com/questions/466764/show-ignored-files-in-git
