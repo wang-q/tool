@@ -1,4 +1,0 @@
-log normal append:log.txt
-filter "-*.bak;-*~"
-load %1 %2
-sync update:left->right
