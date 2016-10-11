@@ -195,6 +195,30 @@ http://stackoverflow.com/questions/8402281/github-push-error-permission-denied
 
 http://apple.stackexchange.com/questions/63253/lowest-volume-is-still-too-loud-how-can-i-make-it-even-lower
 
+## Inkscape
+
+https://bugs.launchpad.net/inkscape/+bug/1218578
+
+在命令行中使用包装过的脚本而不是 `inkscape-bin`, 同时输入输出都使用绝对路径.
+
+```bash
+/Applications/Inkscape.app/Contents/Resources/script -f /path/to/drawing.svg --export-png=/path/to/export/drawing.png
+```
+
+Inkscape 支持标准输入输出, 但要使用 `/dev/stdout` 来代替更常用的 `-`，但在如上面说的，macOS里又要使用绝对路径，所以用`/dev/fd/1`.
+
+```bash
+ /Applications/Inkscape.app/Contents/Resources/script \
+    ~/Downloads/textextract-good.pdf \
+    --export-plain-svg /dev/fd/1 \
+    | xmllint --format - \
+    > ~/Downloads/textextract-good.svg
+```
+
+如[APUE](http://www.informit.com/articles/article.aspx?p=99706&seqNum=15)里所说：
+
+> Some systems provide the pathnames /dev/stdin, /dev/stdout, and /dev/stderr. These pathnames are equivalent to /dev/fd/0, /dev/fd/1, and /dev/fd/2.
+
 # Ubuntu
 
 ## ssh for ubuntu-desktop
