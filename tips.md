@@ -189,6 +189,12 @@ http://stackoverflow.com/questions/8402281/github-push-error-permission-denied
 2. Reboot
 3. Remove `/private/var/vm/sleepimage` is present.
 
+## 微调音量
+
+按 `Option` + `Shift` + `Volume Up/Volume Down`, 以四分之一格调整音量.
+
+http://apple.stackexchange.com/questions/63253/lowest-volume-is-still-too-loud-how-can-i-make-it-even-lower
+
 # Ubuntu
 
 ## ssh for ubuntu-desktop
