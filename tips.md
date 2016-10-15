@@ -215,7 +215,7 @@ Inkscape 支持标准输入输出, 但要使用 `/dev/stdout` 来代替更常用
     > ~/Downloads/textextract-good.svg
 ```
 
-如[APUE](http://www.informit.com/articles/article.aspx?p=99706&seqNum=15)里所说：
+如 [APUE](http://www.informit.com/articles/article.aspx?p=99706&seqNum=15) 里所说：
 
 > Some systems provide the pathnames /dev/stdin, /dev/stdout, and /dev/stderr. These pathnames are equivalent to /dev/fd/0, /dev/fd/1, and /dev/fd/2.
 
