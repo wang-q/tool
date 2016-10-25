@@ -58,12 +58,10 @@ openssl sha1 ~/Documents/1024SecUpd2003-03-03.dmg
 sha256 need newer version of openssl
 
 ```bash
-openssl version # OpenSSL 0.9.8zg 14 July 2015
+openssl version # OpenSSL 0.9.8zh 14 Jan 2016
 
 brew install openssl
-brew link --force openssl
-openssl version # OpenSSL 1.0.2g  1 Mar 2016
-
+/usr/local/opt/openssl/bin/openssl version # OpenSSL 1.0.2j  26 Sep 2016
 ```
 
 ## Extract bash codes from this markdown file.
