@@ -219,6 +219,13 @@ Inkscape 支持标准输入输出, 但要使用 `/dev/stdout` 来代替更常用
 
 # Ubuntu
 
+## how to install arial font in ubuntu
+
+```
+sudo apt-get install ttf-mscorefonts-installer
+sudo fc-cache
+```
+
 ## ssh for ubuntu-desktop
 
 ```bash
