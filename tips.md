@@ -96,6 +96,12 @@ cat Graphing\ Data\ with\ R.pdf | grep -v "it\-ebooks" > Graphing_Data_with_R.pd
 
 用Acrobat打开并保存.
 
+## valgrind
+
+```bash
+valgrind --tool=memcheck --leak-check=full --track-fds=yes ./faops
+```
+
 # Mac
 
 ## 修改mac osx系统的hostname
